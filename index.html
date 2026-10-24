@@ -27,7 +27,7 @@
 *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-drag:none}
 html,body{width:100%;height:100%;height:100dvh;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
 body::after{content:"";position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 a{color:inherit;text-decoration:none}ul{list-style:none}
 .stage{position:fixed;inset:0;display:none;overflow:hidden;height:100%;height:100dvh}
 .ui-pill{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text);background:rgba(24,24,24,.9);border:1px solid rgba(237,234,228,.2);padding:9px 14px;border-radius:6px;transition:background .2s,border-color .2s,transform .2s}
@@ -84,14 +84,14 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
 .legal-links{display:inline-flex;align-items:center;gap:12px;padding-left:14px;border-left:1px solid rgba(237,234,228,.16)}
 #shaft{z-index:40;background:radial-gradient(circle at 50% 50%,#1c1c1c,#0b0b0b 75%,#050505);overflow:hidden;touch-action:none}
 .shaft-tunnel{position:absolute;inset:0;perspective:900px;pointer-events:none;overflow:hidden}
-.shaft-ring{position:absolute;top:50%;left:50%;width:76vw;height:76vh;border:1px solid rgba(237,234,228,.07);transform:translate(-50%,-50%);pointer-events:none}
+.shaft-ring{position:absolute;top:50%;left:50%;width:76vw;height:76vh;border:1px solid rgba(237,234,228,.07);transform:translate(-50%,-50%);pointer-events:none;will-change:transform,opacity}
 .shaft-depth-rail{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none;font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--muted)}
 .shaft-depth-bar{width:2px;height:140px;background:rgba(237,234,228,.14);position:relative;overflow:hidden}
 #shaft-depth-fill{position:absolute;top:0;left:0;width:100%;height:0%;background:var(--text)}
 .shaft-hud{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:60;pointer-events:none}
 #fall-hint{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text);background:rgba(18,18,18,.9);border:1px solid var(--border);padding:8px 16px;border-radius:999px;transition:opacity .35s}
 #drop-stage{position:absolute;inset:0;perspective:1000px;transform-style:preserve-3d}
-.drop-item{position:absolute;top:45%;left:50%;width:min(380px,66vw,calc(58vh * .8));aspect-ratio:4/5;transform-style:preserve-3d;pointer-events:none}
+.drop-item{position:absolute;top:45%;left:50%;width:min(380px,66vw,calc(58vh * .8));aspect-ratio:4/5;transform-style:preserve-3d;pointer-events:none;will-change:transform,opacity}
 .drop-item.is-centered{pointer-events:auto;cursor:zoom-in}
 .poster-frame{position:relative;width:100%;height:100%;aspect-ratio:4/5;border-radius:0;overflow:hidden;background:#101010;border:1px solid rgba(237,234,228,.2);box-shadow:0 30px 90px rgba(0,0,0,.88)}
 .poster-frame img{width:100%;height:100%;object-fit:contain;background:#0c0c0c;display:block;border-radius:0}
@@ -112,7 +112,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
 .reel-track{position:absolute;left:0;top:50%;display:flex;align-items:center;gap:clamp(32px,4.5vw,64px);padding:0 10vw;transform:translate3d(0,-50%,0);will-change:transform}
 .reel-card{width:min(370px,72vw,calc(58vh * .8));flex:0 0 auto;display:flex;flex-direction:column;gap:12px;cursor:zoom-in;transition:transform .35s cubic-bezier(.22,1,.36,1)}
 .reel-card .poster-frame{width:100%;height:auto;aspect-ratio:4/5}
-.reel-card:hover{transform:translateY(-8px) scale(1.02)}
+@media(hover:hover){.reel-card:hover{transform:translateY(-8px) scale(1.02)}}
 .reel-card-caption{display:flex;justify-content:space-between;align-items:baseline;padding:0 4px}
 .reel-card-name{font-family:var(--font-hand);font-size:28px}
 .reel-card-num{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;color:var(--muted)}
@@ -135,6 +135,15 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
 .drawer-contact-list li a:hover{color:#5EEAD4;border-color:#5EEAD4}
 #cookie-banner{position:fixed;bottom:18px;left:18px;z-index:750;background:rgba(22,22,22,.94);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:none;align-items:center;gap:14px;max-width:min(440px,92vw)}
 #cookie-banner p{font-family:var(--font-mono);font-size:11px;line-height:1.45;color:var(--muted)}
+
+/* ===== TOUCH DEVICES: lighter rendering for smoother scroll ===== */
+@media(hover:none),(pointer:coarse){
+  body::after{display:none}
+  .poster-frame{box-shadow:0 14px 36px rgba(0,0,0,.8)}
+  .trapdoor-lid{box-shadow:inset 0 2px 3px rgba(255,255,255,.07),0 10px 22px rgba(0,0,0,.6)}
+  .wm-floor{text-shadow:none}
+}
+
 @media(max-width:760px){
   .about-me-link{top:58px;left:14px;font-size:12px;transform:rotate(-7deg)}
   .about-me-link:hover{transform:rotate(-5deg) scale(1.03)}
@@ -146,7 +155,10 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
   .trapdoor{width:clamp(148px,38vw,176px)}
   .legal-links{border-left:none;padding-left:0;width:100%;justify-content:center}
   .gallery-header{top:62px;left:16px;right:16px}
-  .reel-controls{display:none}
+  /* PREV / NEXT now visible in portrait: pinned at the bottom, above the progress bar */
+  .reel-controls{display:flex;position:fixed;left:50%;bottom:calc(52px + env(safe-area-inset-bottom));transform:translateX(-50%);gap:10px;z-index:56;pointer-events:auto}
+  .reel-controls .ui-pill{min-width:110px;justify-content:center}
+  .reel-progress-bar{bottom:calc(26px + env(safe-area-inset-bottom))}
   #shaft-depth-label{display:none}.shaft-depth-rail{right:8px}
   #cookie-banner{top:70px;bottom:auto;left:12px;right:12px;max-width:none}
   .ui-pill{font-size:11px;padding:11px 14px;min-height:44px;display:inline-flex;align-items:center}
@@ -285,6 +297,9 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
       posters: [..., "blastoise"]
    3. Save + refresh
    → Site auto-sorts A–Z (natural order). Order in the array does not matter.
+   → EXCEPTION: a folder with keepOrder: true is NOT sorted. It shows
+     posters in exactly the order you write them in the array.
+     (ABOUT ME uses this: intro → bio → contact.)
 
    ADD A NEW FOLDER:
    1. Create posters/newfolder/
@@ -294,6 +309,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
         id: "newfolder",          // lowercase, matches folder path
         name: "NEW FOLDER",       // display label on trapdoor
         // seam: "#FF8B5C",       // OPTIONAL color. If omitted, auto-picked
+        // keepOrder: true,       // OPTIONAL. Keep the array order (no A–Z sort)
         path: "posters/newfolder/",
         posters: ["one", "two"]
       }
@@ -304,6 +320,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
    - Special. Not in the scroller.
    - Top-left tilted text button.
    - Uses id: "about"
+   - Fixed order: Intro, Bio, Contact (keepOrder: true)
 
    SEAM COLORS:
    - If you set seam, that color is used.
@@ -323,7 +340,7 @@ const SEAM_PALETTE = [
   "#93C5FD"  // sky
 ];
 
-// RAW DATA — write poster names here (any order). Sorted automatically.
+// RAW DATA — write poster names here (any order). Sorted automatically (unless keepOrder: true).
 const RAW_FOLDERS = [
   {
     id: "studies",
@@ -365,15 +382,18 @@ const RAW_FOLDERS = [
     name: "ABOUT ME",
     seam: "#F5F5F5",
     path: "posters/about/",
+    keepOrder: true, // fixed order: Intro → Bio → Contact (not sorted A–Z)
     posters: ["intro","bio","contact"]
   }
 ];
 
-// Build final FOLDERS: auto seam + alphabetical posters
+// Build final FOLDERS: auto seam + alphabetical posters (unless keepOrder)
 const FOLDERS = RAW_FOLDERS.map((folder, index) => {
-  const posters = [...folder.posters].sort((a, b) =>
-    String(a).localeCompare(String(b), undefined, { sensitivity: "base", numeric: true })
-  );
+  const posters = folder.keepOrder
+    ? [...folder.posters]
+    : [...folder.posters].sort((a, b) =>
+        String(a).localeCompare(String(b), undefined, { sensitivity: "base", numeric: true })
+      );
   return {
     id: folder.id,
     name: folder.name,
@@ -386,6 +406,15 @@ const FOLDERS = RAW_FOLDERS.map((folder, index) => {
 const $ = (s) => document.querySelector(s);
 const pad = (n) => String(n).padStart(2, "0");
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+/* Cached elements used every frame (avoids repeated DOM lookups) */
+const elLaneTrack = $("#lane-track");
+const elReelTrack = $("#reel-track");
+const elReelThumb = $("#reel-progress-thumb");
+const elDepthLabel = $("#shaft-depth-label");
+const elDepthFill = $("#shaft-depth-fill");
+const elFrameInd = $("#shaft-frame-indicator");
+const elReelViewport = $("#reel-viewport");
 
 function getCandidatePaths(folder, rawName, index) {
   const exact = String(rawName).trim();
@@ -516,8 +545,12 @@ const state = {
   reelDragging: false, reelStartX: 0, reelBaseTarget: 0, reelPointerMoved: false
 };
 
+/* Render caches: skip DOM writes when nothing changed (big win on phones) */
+let lastLaneX = NaN, lastReelX = NaN, lastDropY = NaN;
+let lastDepthText = "", lastFrameText = "";
+
 function buildFloorLane() {
-  const t = $("#lane-track"); t.innerHTML = "";
+  const t = elLaneTrack; t.innerHTML = "";
   state.scrollerFolders = FOLDERS.filter((f) => f.id !== "about");
   [...state.scrollerFolders, ...state.scrollerFolders, ...state.scrollerFolders].forEach((f, ix) => {
     const ri = ix % state.scrollerFolders.length;
@@ -533,7 +566,7 @@ function buildFloorLane() {
   requestAnimationFrame(measureInfiniteLane);
 }
 function measureInfiniteLane() {
-  const ds = $("#lane-track").querySelectorAll(".trapdoor");
+  const ds = elLaneTrack.querySelectorAll(".trapdoor");
   const sz = state.scrollerFolders.length || 1;
   if (ds.length < sz * 2) return;
   state.singleSetWidth = ds[sz].getBoundingClientRect().left - ds[0].getBoundingClientRect().left;
@@ -553,26 +586,35 @@ function showFloorStage() {
   $("#open-drawer-btn").style.display = "inline-flex";
   updatePageMeta("THE FLOOR — Amey Nair | 1080×1350 Visual Archive", "THE FLOOR — curated archive.");
   const f = $("#floor"); f.style.display = "flex";
-  if (!$("#lane-track").children.length) buildFloorLane(); else measureInfiniteLane();
+  if (!elLaneTrack.children.length) buildFloorLane(); else measureInfiniteLane();
 }
 function hideLaneHint() { const h = $("#lane-hint"); if (h) h.style.opacity = "0"; }
 
+/* ---------- Pointer handling (drag + touch momentum) ---------- */
 const lw = $("#lane-wrapper");
+let lanePrevX = 0, lanePrevT = 0, laneVel = 0;
+let reelPrevX = 0, reelPrevT = 0, reelVel = 0;
+
 lw.addEventListener("pointerdown", (e) => {
   if (state.view !== "floor") return;
   state.laneDragging = true; state.laneStartX = e.clientX; state.laneBaseTarget = state.laneTarget;
   state.lanePointerMoved = false; lw.classList.add("dragging");
+  lanePrevX = e.clientX; lanePrevT = e.timeStamp; laneVel = 0;
 });
 window.addEventListener("pointermove", (e) => {
   if (state.laneDragging && state.view === "floor") {
     const dx = e.clientX - state.laneStartX;
     if (Math.abs(dx) > 6) { state.lanePointerMoved = true; hideLaneHint(); }
     state.laneTarget = state.laneBaseTarget + dx;
+    const dt = e.timeStamp - lanePrevT;
+    if (dt > 0) { laneVel = laneVel * 0.8 + ((e.clientX - lanePrevX) / dt) * 0.2; lanePrevX = e.clientX; lanePrevT = e.timeStamp; }
   }
   if (state.reelDragging && state.view === "gallery") {
     const dx = e.clientX - state.reelStartX;
     if (Math.abs(dx) > 6) state.reelPointerMoved = true;
     state.reelTarget = clamp(state.reelBaseTarget + dx, state.reelMin, 0);
+    const dt = e.timeStamp - reelPrevT;
+    if (dt > 0) { reelVel = reelVel * 0.8 + ((e.clientX - reelPrevX) / dt) * 0.2; reelPrevX = e.clientX; reelPrevT = e.timeStamp; }
   }
 });
 window.addEventListener("pointerup", (e) => {
@@ -584,15 +626,27 @@ window.addEventListener("pointerup", (e) => {
         const f = FOLDERS.find((x) => x.id === d.dataset.folderId);
         if (f) openTrapdoorSequence(f, d);
       }
+    } else if (state.lanePointerMoved && e.pointerType === "touch" && state.view === "floor") {
+      // touch only: gentle flick momentum (mouse behaviour is unchanged)
+      const v = (e.timeStamp - lanePrevT > 80) ? 0 : laneVel;
+      state.laneTarget += clamp(v, -3, 3) * 160;
     }
   }
   if (state.reelDragging) {
-    state.reelDragging = false; $("#reel-viewport").classList.remove("dragging");
+    state.reelDragging = false; elReelViewport.classList.remove("dragging");
     if (!state.reelPointerMoved && state.view === "gallery") {
       const c = e.target.closest(".reel-card");
       if (c && state.activeFolder) openFocusModal(state.activeFolder, state.activeFolder.posters[+c.dataset.index], +c.dataset.index);
+    } else if (state.reelPointerMoved && e.pointerType === "touch" && state.view === "gallery") {
+      const v = (e.timeStamp - reelPrevT > 80) ? 0 : reelVel;
+      state.reelTarget = clamp(state.reelTarget + clamp(v, -3, 3) * 160, state.reelMin, 0);
     }
   }
+});
+// If the browser cancels a touch (e.g. it starts a vertical scroll), release the drag cleanly
+window.addEventListener("pointercancel", () => {
+  if (state.laneDragging) { state.laneDragging = false; lw.classList.remove("dragging"); }
+  if (state.reelDragging) { state.reelDragging = false; elReelViewport.classList.remove("dragging"); }
 });
 
 function openTrapdoorSequence(folder, doorEl) {
@@ -626,6 +680,7 @@ function buildShaftTunnel(seam) {
 }
 function startDropSequence(folder) {
   state.view = "shaft"; state.dropY = 0; state.dropTarget = 0; state.dropItems = [];
+  lastDropY = NaN; lastDepthText = ""; lastFrameText = "";
   $("#back-to-floor-btn").style.display = "inline-flex";
   $("#open-drawer-btn").style.display = "inline-flex";
   $("#fall-hint").style.opacity = "1";
@@ -646,12 +701,12 @@ function startDropSequence(folder) {
   $("#shaft").style.display = "block";
 }
 function enterGalleryReel(folder) {
-  state.view = "gallery"; state.reelX = 0; state.reelTarget = 0;
+  state.view = "gallery"; state.reelX = 0; state.reelTarget = 0; lastReelX = NaN;
   $("#shaft").style.display = "none";
   $("#back-to-floor-btn").style.display = "inline-flex";
   $("#open-drawer-btn").style.display = "inline-flex";
   $("#gallery-folder-title").textContent = `${folder.name}·${pad(folder.posters.length)} FRAMES`;
-  const tr = $("#reel-track"); tr.innerHTML = "";
+  const tr = elReelTrack; tr.innerHTML = "";
   folder.posters.forEach((rn, ix) => {
     const c = document.createElement("article"); c.className = "reel-card"; c.dataset.index = String(ix);
     const fr = document.createElement("div"); fr.className = "poster-frame";
@@ -664,15 +719,16 @@ function enterGalleryReel(folder) {
   requestAnimationFrame(measureReelBounds);
 }
 function measureReelBounds() {
-  const vp = $("#reel-viewport"), tr = $("#reel-track");
+  const vp = elReelViewport, tr = elReelTrack;
   if (!vp || !tr) return;
   state.reelMin = Math.min(0, vp.clientWidth - tr.scrollWidth);
   state.reelTarget = clamp(state.reelTarget, state.reelMin, 0);
 }
-$("#reel-viewport").addEventListener("pointerdown", (e) => {
+elReelViewport.addEventListener("pointerdown", (e) => {
   if (state.view !== "gallery") return;
   state.reelDragging = true; state.reelStartX = e.clientX; state.reelBaseTarget = state.reelTarget;
-  state.reelPointerMoved = false; $("#reel-viewport").classList.add("dragging");
+  state.reelPointerMoved = false; elReelViewport.classList.add("dragging");
+  reelPrevX = e.clientX; reelPrevT = e.timeStamp; reelVel = 0;
 });
 $("#reel-prev-btn").addEventListener("click", () => { state.reelTarget = clamp(state.reelTarget + 420, state.reelMin, 0); });
 $("#reel-next-btn").addEventListener("click", () => { state.reelTarget = clamp(state.reelTarget - 420, state.reelMin, 0); });
@@ -689,7 +745,8 @@ function returnToFloor() {
     const r = td.getBoundingClientRect();
     state.laneTarget += innerWidth / 2 - (r.left + r.width / 2);
     state.laneX = state.laneTarget;
-    $("#lane-track").style.transform = `translate3d(${state.laneX}px,-50%,0)`;
+    elLaneTrack.style.transform = `translate3d(${state.laneX}px,-50%,0)`;
+    lastLaneX = state.laneX;
     td.classList.add("is-open");
   }
   floor.style.transform = "scale(1.28)"; floor.style.opacity = "0";
@@ -717,58 +774,81 @@ $("#about-me-link").addEventListener("click", () => {
   }
 });
 
-function masterTick() {
+/* ---------- Main animation loop ---------- */
+// Smoothing is time-based, so it feels identical on 60Hz laptops and 90/120Hz phones.
+let lastFrameTime = 0;
+function masterTick(now) {
+  const dt = lastFrameTime ? Math.min(now - lastFrameTime, 50) : 16.667;
+  lastFrameTime = now;
+  const frames = dt / 16.667;
+  const k12 = 1 - Math.pow(1 - 0.12, frames);
+  const k095 = 1 - Math.pow(1 - 0.095, frames);
+
   if (state.view === "floor" || state.view === "opening") {
-    state.laneX += (state.laneTarget - state.laneX) * 0.12;
+    state.laneX += (state.laneTarget - state.laneX) * k12;
+    if (Math.abs(state.laneTarget - state.laneX) < 0.05) state.laneX = state.laneTarget;
     wrapInfiniteLane();
-    $("#lane-track").style.transform = `translate3d(${state.laneX}px,-50%,0)`;
+    if (state.laneX !== lastLaneX) {
+      elLaneTrack.style.transform = `translate3d(${state.laneX}px,-50%,0)`;
+      lastLaneX = state.laneX;
+    }
   }
   if (state.view === "shaft") {
-    state.dropY += (state.dropTarget - state.dropY) * 0.095;
+    state.dropY += (state.dropTarget - state.dropY) * k095;
+    if (Math.abs(state.dropTarget - state.dropY) < 0.05) state.dropY = state.dropTarget;
     const ts = Math.max(1, (state.dropItems.length - 1) * state.dropSpacing), md = ts + 560;
-    $("#shaft-depth-label").textContent = `DEPTH//${pad(Math.round(state.dropY / 18))}m`;
-    $("#shaft-depth-fill").style.height = `${clamp((state.dropY / md) * 100, 0, 100)}%`;
-    const ai = clamp(Math.round(state.dropY / state.dropSpacing) + 1, 1, state.dropItems.length || 1);
-    $("#shaft-frame-indicator").textContent = `${pad(ai)}/${pad(state.dropItems.length || 1)}`;
-    state.shaftRings.forEach((r, ri) => {
-      const cy = ((state.dropY * 1.35 + ri * 260) % 1820) / 1820;
-      const z = -1500 + cy * 1950, ys = (0.5 - cy) * 220;
-      const al = cy < 0.15 ? cy / 0.15 : (cy > 0.82 ? (1 - cy) / 0.18 : 1);
-      r.style.opacity = String(al * 0.22);
-      r.style.transform = `translate3d(-50%,calc(-50% + ${ys}px),${z}px)`;
-    });
-    if (state.dropY > md && state.activeFolder) enterGalleryReel(state.activeFolder);
-    else {
-      state.dropItems.forEach((item, i) => {
-        const rel = state.dropY - i * state.dropSpacing, hold = 145;
-        let z = 0, y = 0, x = 0, rx = 0, rz = 0, op = 1, br = 1;
-        const sd = i % 2 ? -1 : 1;
-        if (Math.abs(rel) <= hold) {
-          const t = rel / hold; z = t * 35; y = -t * 18; x = sd * (1 - Math.cos(t * Math.PI * 0.5)) * 8; rx = -t * 2.5;
-        } else if (rel < -hold) {
-          const ap = Math.abs(rel + hold), nm = clamp(ap / 1500, 0, 1);
-          z = -ap * 0.92; y = Math.min(340, ap * 0.34); x = sd * Math.min(130, ap * 0.11);
-          rx = clamp(ap * 0.018, 0, 18); rz = sd * clamp(ap * 0.005, 0, 4);
-          op = clamp(1 - nm * 0.92, 0, 0.88); br = clamp(1 - nm * 0.65, 0.3, 1);
-        } else {
-          const ps = rel - hold; z = 35 + ps * 0.78; y = -18 - ps * 1.18; x = sd * Math.min(90, ps * 0.12);
-          rx = -clamp(ps * 0.028, 0, 16); op = clamp(1 - ps / 390, 0, 1);
-        }
-        const cen = Math.abs(rel) <= hold + 30;
-        item.el.classList.toggle("is-centered", cen);
-        item.el.style.opacity = String(op);
-        item.el.style.filter = br < 0.99 ? `brightness(${br})` : "none";
-        item.el.style.zIndex = String(200 - i * 10 + (cen ? 50 : 0));
-        item.el.style.transform = `translate3d(calc(-50% + ${x}px),calc(-50% + ${y}px),${z}px) rotateX(${rx}deg) rotateZ(${rz}deg)`;
-        item.caption.style.opacity = cen ? "1" : "0";
+    if (state.dropY !== lastDropY) {
+      lastDropY = state.dropY;
+      const depthText = `DEPTH//${pad(Math.round(state.dropY / 18))}m`;
+      if (depthText !== lastDepthText) { elDepthLabel.textContent = depthText; lastDepthText = depthText; }
+      elDepthFill.style.height = `${clamp((state.dropY / md) * 100, 0, 100)}%`;
+      const ai = clamp(Math.round(state.dropY / state.dropSpacing) + 1, 1, state.dropItems.length || 1);
+      const frameText = `${pad(ai)}/${pad(state.dropItems.length || 1)}`;
+      if (frameText !== lastFrameText) { elFrameInd.textContent = frameText; lastFrameText = frameText; }
+      state.shaftRings.forEach((r, ri) => {
+        const cy = ((state.dropY * 1.35 + ri * 260) % 1820) / 1820;
+        const z = -1500 + cy * 1950, ys = (0.5 - cy) * 220;
+        const al = cy < 0.15 ? cy / 0.15 : (cy > 0.82 ? (1 - cy) / 0.18 : 1);
+        r.style.opacity = String(al * 0.22);
+        r.style.transform = `translate3d(-50%,calc(-50% + ${ys}px),${z}px)`;
       });
+      if (state.dropY > md && state.activeFolder) enterGalleryReel(state.activeFolder);
+      else {
+        state.dropItems.forEach((item, i) => {
+          const rel = state.dropY - i * state.dropSpacing, hold = 145;
+          let z = 0, y = 0, x = 0, rx = 0, rz = 0, op = 1, br = 1;
+          const sd = i % 2 ? -1 : 1;
+          if (Math.abs(rel) <= hold) {
+            const t = rel / hold; z = t * 35; y = -t * 18; x = sd * (1 - Math.cos(t * Math.PI * 0.5)) * 8; rx = -t * 2.5;
+          } else if (rel < -hold) {
+            const ap = Math.abs(rel + hold), nm = clamp(ap / 1500, 0, 1);
+            z = -ap * 0.92; y = Math.min(340, ap * 0.34); x = sd * Math.min(130, ap * 0.11);
+            rx = clamp(ap * 0.018, 0, 18); rz = sd * clamp(ap * 0.005, 0, 4);
+            op = clamp(1 - nm * 0.92, 0, 0.88); br = clamp(1 - nm * 0.65, 0.3, 1);
+          } else {
+            const ps = rel - hold; z = 35 + ps * 0.78; y = -18 - ps * 1.18; x = sd * Math.min(90, ps * 0.12);
+            rx = -clamp(ps * 0.028, 0, 16); op = clamp(1 - ps / 390, 0, 1);
+          }
+          const cen = Math.abs(rel) <= hold + 30;
+          item.el.classList.toggle("is-centered", cen);
+          item.el.style.opacity = String(op);
+          item.el.style.filter = br < 0.99 ? `brightness(${br})` : "none";
+          item.el.style.zIndex = String(200 - i * 10 + (cen ? 50 : 0));
+          item.el.style.transform = `translate3d(calc(-50% + ${x}px),calc(-50% + ${y}px),${z}px) rotateX(${rx}deg) rotateZ(${rz}deg)`;
+          item.caption.style.opacity = cen ? "1" : "0";
+        });
+      }
     }
   }
   if (state.view === "gallery") {
-    state.reelX += (state.reelTarget - state.reelX) * 0.12;
-    $("#reel-track").style.transform = `translate3d(${state.reelX}px,-50%,0)`;
-    const rg = Math.abs(state.reelMin) || 1;
-    $("#reel-progress-thumb").style.transform = `translateX(${clamp(Math.abs(state.reelX) / rg, 0, 1) * 300}%)`;
+    state.reelX += (state.reelTarget - state.reelX) * k12;
+    if (Math.abs(state.reelTarget - state.reelX) < 0.05) state.reelX = state.reelTarget;
+    if (state.reelX !== lastReelX) {
+      lastReelX = state.reelX;
+      elReelTrack.style.transform = `translate3d(${state.reelX}px,-50%,0)`;
+      const rg = Math.abs(state.reelMin) || 1;
+      elReelThumb.style.transform = `translateX(${clamp(Math.abs(state.reelX) / rg, 0, 1) * 300}%)`;
+    }
   }
   requestAnimationFrame(masterTick);
 }
