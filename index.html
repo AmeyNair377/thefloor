@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#1E1E1E" />
+<title>THE FLOOR — Amey Nair | 1080×1350 Visual Archive</title>
+<meta id="meta-desc" name="description" content="THE FLOOR — A curated 1080×1350 graphic design poster archive by Amey Nair." />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="THE FLOOR — Amey Nair" />
+<meta property="og:description" content="i made these inside my head. now they live on the floor." />
+<meta property="og:image" content="posters/objects/dice.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231E1E1E'/%3E%3Crect x='12' y='8' width='40' height='48' fill='%23262626' stroke='%235EEAD4' stroke-width='3'/%3E%3C/svg%3E" />
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@800&display=swap" as="style" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Reenie+Beanie&family=Syne:wght@800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Reenie+Beanie&family=Syne:wght@800&display=swap" rel="stylesheet" /></noscript>
+<style>
+:root{
+  --bg:#1E1E1E;--shaft:#141414;--text:#EDEAE4;--muted:#A8A29E;--border:rgba(237,234,228,.14);
+  --font-display:"Syne",sans-serif;--font-hand:"Reenie Beanie",cursive;
+  --font-mono:"JetBrains Mono",monospace;--font-sans:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-drag:none}
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body::after{content:"";position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:inherit;text-decoration:none}ul{list-style:none}
+.stage{position:fixed;inset:0;display:none;overflow:hidden;height:100%;height:100dvh}
+.ui-pill{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text);background:rgba(24,24,24,.9);border:1px solid rgba(237,234,228,.2);padding:9px 14px;border-radius:6px;transition:background .2s,border-color .2s,transform .2s}
+.ui-pill:hover{background:#2f2f2f;border-color:rgba(237,234,228,.45);transform:translateY(-1px)}
+#back-to-floor-btn{display:none;position:fixed;top:16px;left:22px;z-index:700;font-weight:700}
+#open-drawer-btn{display:none;position:fixed;top:16px;right:22px;z-index:700}
+#loader{position:fixed;inset:0;z-index:1000;background:radial-gradient(circle at 50% 45%,#2b2b2b,#1E1E1E 65%,#141414);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;transition:opacity .45s}
+#loader-counter{font-family:var(--font-mono);font-size:28px;font-weight:700;letter-spacing:.14em}
+.loader-desk{position:relative;width:230px;height:288px;perspective:1000px}
+.deal-card{position:absolute;inset:0;aspect-ratio:4/5;background:#222;border:1px solid rgba(237,234,228,.22);border-radius:8px;box-shadow:0 18px 45px rgba(0,0,0,.65);padding:18px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;will-change:transform,opacity;transition:transform .28s cubic-bezier(.22,1,.36,1),opacity .4s}
+.deal-card-crop{position:absolute;inset:0;overflow:hidden;background:#181818;z-index:1}
+.deal-card-crop img{width:100%;height:100%;object-fit:cover;transform:scale(1.22);filter:blur(6px) brightness(.62);opacity:.88}
+.deal-card-crop::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,18,18,.78),rgba(18,18,18,.25) 50%,rgba(18,18,18,.82))}
+.deal-card-top{display:flex;justify-content:space-between;align-items:center;z-index:2;position:relative}
+.deal-card-name{font-family:var(--font-mono);font-size:14px;font-weight:700;letter-spacing:.14em;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+.deal-card-dot{width:9px;height:9px;border-radius:50%;box-shadow:0 0 8px currentColor}
+.deal-card-foot{font-family:var(--font-mono);font-size:11px;color:#E5E0D8;align-self:flex-end;z-index:2;position:relative;text-shadow:0 2px 8px rgba(0,0,0,.9)}
+#floor{z-index:10;display:flex;flex-direction:column;justify-content:space-between;padding:0 0 14px;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(237,234,228,.05),transparent 60%),radial-gradient(ellipse 60% 40% at 50% 100%,rgba(237,234,228,.03),transparent 55%),var(--bg)}
+.about-me-link{position:fixed;top:84px;left:32px;z-index:30;font-family:var(--font-mono);font-size:14px;font-weight:700;letter-spacing:.14em;color:var(--text);text-transform:uppercase;cursor:pointer;transform:rotate(-8deg);transform-origin:left center;padding:6px 4px;border-bottom:2px solid transparent;transition:border-color .3s,color .3s,transform .3s;background:none}
+.about-me-link:hover{border-color:var(--text);transform:rotate(-6deg) scale(1.04)}
+.floor-hero{width:100%;padding:clamp(86px,11vh,112px) 24px 0;display:flex;justify-content:center;pointer-events:none;z-index:2}
+.title-lockup{position:relative;width:fit-content;margin:0 auto;transform:rotate(-2.4deg);transform-origin:center center;text-align:center}
+.wm-the{position:absolute;top:-8px;left:14%;transform:translateX(-70%);font-family:var(--font-mono);font-size:clamp(12px,1.2vw,16px);font-weight:700;letter-spacing:.65em;color:rgba(237,234,228,.45);white-space:nowrap}
+.wm-floor{font-family:var(--font-display);font-size:clamp(54px,8.4vw,128px);font-weight:800;line-height:.84;letter-spacing:-.045em;text-transform:uppercase;text-shadow:0 20px 50px rgba(0,0,0,.5)}
+.floor-tagline{margin-top:10px;font-family:var(--font-hand);font-size:clamp(24px,2.7vw,38px);color:#d9d3c8;opacity:.92}
+.floor-stage{flex:1;position:relative;display:flex;align-items:center;min-height:0;padding:12px 0}
+.lane-wrapper{position:relative;width:100%;height:clamp(240px,35vh,350px);overflow:hidden;cursor:grab;touch-action:pan-y;mask-image:linear-gradient(90deg,transparent 0%,#000 7%,#000 93%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 7%,#000 93%,transparent 100%)}
+.lane-wrapper.dragging{cursor:grabbing}
+.lane-track{position:absolute;left:0;top:50%;display:flex;align-items:center;gap:clamp(32px,4vw,68px);transform:translate3d(0,-50%,0);will-change:transform;padding:0 clamp(20px,6vw,80px)}
+.trapdoor{--seam:#5EEAD4;position:relative;width:clamp(168px,13.5vw,220px);aspect-ratio:4/5;flex:0 0 auto;perspective:1100px;cursor:pointer}
+.trapdoor-seam{position:absolute;inset:-3px;border-radius:10px;border:2px solid var(--seam);box-shadow:0 0 14px var(--seam);opacity:.28;transition:opacity .35s,box-shadow .35s;pointer-events:none}
+.trapdoor-pit{position:absolute;inset:6px;border-radius:6px;background:radial-gradient(circle at 50% 35%,#191919,#050505 85%);box-shadow:inset 0 12px 32px rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.trapdoor-pit-preview{width:82%;height:82%;object-fit:cover;opacity:.35;transform:scale(.92);transition:opacity .35s,transform .35s}
+.trapdoor-lid{position:absolute;inset:0;border-radius:8px;border:3px solid #121010;background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 38px),linear-gradient(145deg,#322b29,#221d1b 60%,#181413);box-shadow:inset 0 2px 3px rgba(255,255,255,.07),0 18px 38px rgba(0,0,0,.65);transform-origin:top center;transform:rotateX(0);transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .4s;display:flex;flex-direction:column;justify-content:space-between;padding:18px 14px 14px;backface-visibility:hidden}
+.trapdoor-hinges{position:absolute;top:-6px;left:14px;right:14px;display:flex;justify-content:space-between;pointer-events:none}
+.hinge{width:30px;height:9px;background:#0d0c0c;border:1px solid rgba(255,255,255,.12);border-radius:2px}
+.trapdoor-header{display:flex;justify-content:space-between;align-items:center;z-index:3;gap:8px}
+.trapdoor-title{font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:.12em;color:#F5F3EF;text-shadow:0 2px 6px rgba(0,0,0,.8)}
+.trapdoor-Dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--seam);box-shadow:0 0 8px var(--seam)}
+.trapdoor-footer{display:flex;flex-direction:column;gap:8px;z-index:3}
+.trapdoor-count{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:#D6D3CD}
+.trapdoor-handle{width:48px;height:7px;margin:0 auto;border-radius:999px;background:#0b0a0a;border:1px solid rgba(255,255,255,.1)}
+.trapdoor:hover .trapdoor-lid{transform:rotateX(16deg) translateY(-3px);box-shadow:0 26px 48px rgba(0,0,0,.82)}
+.trapdoor:hover .trapdoor-seam{opacity:.85;box-shadow:0 0 26px var(--seam)}
+.trapdoor:hover .trapdoor-pit-preview{opacity:.65;transform:scale(1)}
+.trapdoor.is-open .trapdoor-lid{transform:rotateX(108deg)}
+.trapdoor.is-open .trapdoor-seam{opacity:1;box-shadow:0 0 36px var(--seam)}
+.floor-footer{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;z-index:3;padding:8px 18px max(14px,env(safe-area-inset-bottom));background:linear-gradient(180deg,transparent,rgba(0,0,0,.28))}
+#lane-hint{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);transition:opacity .5s}
+.floor-meta-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 18px;pointer-events:auto;max-width:1000px}
+.contact-ul{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px}
+.contact-ul a,.legal-trigger{font-family:var(--font-mono);font-size:11px;letter-spacing:.07em;color:#Bdb7ad;border-bottom:1px solid transparent;padding-bottom:2px;transition:color .2s,border-color .2s}
+.contact-ul a:hover,.legal-trigger:hover{color:#fff;border-color:#fff}
+.legal-links{display:inline-flex;align-items:center;gap:12px;padding-left:14px;border-left:1px solid rgba(237,234,228,.16)}
+#shaft{z-index:40;background:radial-gradient(circle at 50% 50%,#1c1c1c,#0b0b0b 75%,#050505);overflow:hidden;touch-action:none}
+.shaft-tunnel{position:absolute;inset:0;perspective:900px;pointer-events:none;overflow:hidden}
+.shaft-ring{position:absolute;top:50%;left:50%;width:76vw;height:76vh;border:1px solid rgba(237,234,228,.07);transform:translate(-50%,-50%);pointer-events:none}
+.shaft-depth-rail{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none;font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--muted)}
+.shaft-depth-bar{width:2px;height:140px;background:rgba(237,234,228,.14);position:relative;overflow:hidden}
+#shaft-depth-fill{position:absolute;top:0;left:0;width:100%;height:0%;background:var(--text)}
+.shaft-hud{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:60;pointer-events:none}
+#fall-hint{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text);background:rgba(18,18,18,.9);border:1px solid var(--border);padding:8px 16px;border-radius:999px;transition:opacity .35s}
+#drop-stage{position:absolute;inset:0;perspective:1000px;transform-style:preserve-3d}
+.drop-item{position:absolute;top:45%;left:50%;width:min(380px,66vw,calc(58vh * .8));aspect-ratio:4/5;transform-style:preserve-3d;pointer-events:none}
+.drop-item.is-centered{pointer-events:auto;cursor:zoom-in}
+.poster-frame{position:relative;width:100%;height:100%;aspect-ratio:4/5;border-radius:0;overflow:hidden;background:#101010;border:1px solid rgba(237,234,228,.2);box-shadow:0 30px 90px rgba(0,0,0,.88)}
+.poster-frame img{width:100%;height:100%;object-fit:contain;background:#0c0c0c;display:block;border-radius:0}
+.poster-fallback{position:absolute;inset:0;padding:24px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(155deg,#1f1f1f,#121212);color:var(--text);text-align:left}
+.poster-fallback-top{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--muted)}
+.poster-fallback-title{font-family:var(--font-display);font-size:clamp(22px,3vw,34px);line-height:.95;text-transform:uppercase;word-break:break-word}
+.poster-fallback-bar{width:100%;height:4px;margin:12px 0}
+.poster-fallback-path{font-family:var(--font-mono);font-size:10px;color:#a8a29e;word-break:break-all}
+.drop-caption{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);width:max-content;max-width:90vw;text-align:center;background:rgba(16,16,16,.92);border:1px solid rgba(237,234,228,.18);padding:9px 20px;border-radius:6px;transition:opacity .2s}
+.drop-caption-title{display:block;font-family:var(--font-hand);font-size:clamp(30px,3.6vw,42px);color:#fff;line-height:.95}
+.drop-caption-meta{display:block;margin-top:5px;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.16em;color:#D6D3CD;text-transform:uppercase}
+#gallery{z-index:45;background:radial-gradient(circle at 50% 50%,rgba(237,234,228,.045),transparent 45%),var(--shaft)}
+.gallery-header{position:fixed;top:72px;left:28px;right:28px;z-index:55;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+.gallery-folder-title{font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:.16em;background:rgba(24,24,24,.85);border:1px solid var(--border);padding:8px 14px;border-radius:6px}
+.reel-controls{display:flex;gap:8px;pointer-events:auto}
+.reel-viewport{position:absolute;left:0;right:0;top:50%;height:min(74vh,690px);transform:translateY(-50%);overflow:hidden;cursor:grab;touch-action:pan-y}
+.reel-viewport.dragging{cursor:grabbing}
+.reel-track{position:absolute;left:0;top:50%;display:flex;align-items:center;gap:clamp(32px,4.5vw,64px);padding:0 10vw;transform:translate3d(0,-50%,0);will-change:transform}
+.reel-card{width:min(370px,72vw,calc(58vh * .8));flex:0 0 auto;display:flex;flex-direction:column;gap:12px;cursor:zoom-in;transition:transform .35s cubic-bezier(.22,1,.36,1)}
+.reel-card .poster-frame{width:100%;height:auto;aspect-ratio:4/5}
+.reel-card:hover{transform:translateY(-8px) scale(1.02)}
+.reel-card-caption{display:flex;justify-content:space-between;align-items:baseline;padding:0 4px}
+.reel-card-name{font-family:var(--font-hand);font-size:28px}
+.reel-card-num{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;color:var(--muted)}
+.reel-progress-bar{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);width:min(480px,64vw);height:3px;background:rgba(237,234,228,.14);border-radius:999px;overflow:hidden}
+#reel-progress-thumb{display:block;width:25%;height:100%;background:var(--text);border-radius:999px}
+#focus-modal{position:fixed;inset:0;z-index:850;background:rgba(8,8,8,.94);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;cursor:zoom-out}
+.focus-box{width:min(92vw,520px,calc(78vh * .8));height:auto;aspect-ratio:4/5;border-radius:0}
+.focus-meta{font-family:var(--font-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+#studio-drawer{position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.72);display:none;justify-content:flex-end}
+.drawer-panel{width:min(520px,100vw);height:100%;background:#1A1A1A;border-left:1px solid var(--border);padding:28px;overflow-y:auto;display:flex;flex-direction:column;gap:24px;user-select:text;-webkit-user-select:text}
+.drawer-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:16px}
+.drawer-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.drawer-tab{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;padding:7px 12px;border-radius:4px;border:1px solid var(--border);color:var(--muted);text-transform:uppercase}
+.drawer-tab.active{background:var(--text);color:#141414;font-weight:700}
+.drawer-section{display:none;flex-direction:column;gap:16px;line-height:1.65;font-size:14px;color:#D6D3CD}
+.drawer-section.active{display:flex}
+.drawer-section h2{font-family:var(--font-display);font-size:26px;color:var(--text);text-transform:uppercase}
+.drawer-contact-list{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.drawer-contact-list li a{font-family:var(--font-mono);font-size:13px;color:var(--text);border-bottom:1px solid rgba(237,234,228,.25);padding-bottom:3px}
+.drawer-contact-list li a:hover{color:#5EEAD4;border-color:#5EEAD4}
+#cookie-banner{position:fixed;bottom:18px;left:18px;z-index:750;background:rgba(22,22,22,.94);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:none;align-items:center;gap:14px;max-width:min(440px,92vw)}
+#cookie-banner p{font-family:var(--font-mono);font-size:11px;line-height:1.45;color:var(--muted)}
+@media(max-width:760px){
+  .about-me-link{top:58px;left:14px;font-size:12px;transform:rotate(-7deg)}
+  .about-me-link:hover{transform:rotate(-5deg) scale(1.03)}
+  .floor-hero{padding:110px 18px 0}
+  .wm-the{top:-6px;left:22%;transform:translateX(-55%);font-size:11px;letter-spacing:.45em}
+  .wm-floor{font-size:clamp(46px,14vw,74px)}
+  .floor-tagline{font-size:clamp(20px,5.5vw,28px)}
+  .lane-wrapper{height:clamp(205px,32vh,275px)}
+  .trapdoor{width:clamp(148px,38vw,176px)}
+  .legal-links{border-left:none;padding-left:0;width:100%;justify-content:center}
+  .gallery-header{top:62px;left:16px;right:16px}
+  .reel-controls{display:none}
+  #shaft-depth-label{display:none}.shaft-depth-rail{right:8px}
+  #cookie-banner{top:70px;bottom:auto;left:12px;right:12px;max-width:none}
+  .ui-pill{font-size:11px;padding:11px 14px;min-height:44px;display:inline-flex;align-items:center}
+  .contact-ul a,.legal-trigger{font-size:12px;padding:6px 2px;min-height:36px;display:inline-flex;align-items:center}
+}
+@media(max-height:700px) and (min-width:761px){
+  .floor-hero{padding-top:78px}.wm-floor{font-size:clamp(48px,9vh,84px)}
+  .lane-wrapper{height:clamp(200px,36vh,270px)}
+}
+@media(orientation:landscape) and (max-height:500px){
+  .floor-hero{padding-top:44px}
+  .wm-floor{font-size:clamp(36px,8vh,64px)}
+  .floor-tagline{font-size:clamp(16px,3vh,22px)}
+  .lane-wrapper{height:55vh}
+  .about-me-link{top:48px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<button class="ui-pill" id="back-to-floor-btn">← BACK TO THE FLOOR</button>
+<button class="ui-pill" id="open-drawer-btn">CONTACT / LEGAL</button>
+
+<section id="loader"><div id="loader-counter">0%</div><div class="loader-desk" id="loader-desk"></div></section>
+
+<main id="floor" class="stage">
+  <button class="about-me-link" id="about-me-link" type="button" aria-label="Open About Me">ABOUT ME</button>
+  <header class="floor-hero">
+    <div class="title-lockup">
+      <span class="wm-the">THE</span>
+      <h1 class="wm-floor">FLOOR</h1>
+      <p class="floor-tagline">i made these inside my head. now they live on the floor.</p>
+    </div>
+  </header>
+  <div class="floor-stage"><div class="lane-wrapper" id="lane-wrapper"><div class="lane-track" id="lane-track"></div></div></div>
+  <footer class="floor-footer">
+    <div id="lane-hint">pick a hatch · scroll or drag the lane</div>
+    <div class="floor-meta-bar">
+      <ul class="contact-ul">
+        <li><a href="https://www.linkedin.com/in/amey-nair-130328428/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
+        <li><a href="https://instagram.com/yourstruly.amey" target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
+        <li><a href="mailto:ameynair737@gmail.com?subject=FashionVault%20enquiry">ameynair737@gmail.com</a></li>
+        <li><a href="https://wa.me/919136041633" target="_blank" rel="noopener noreferrer">9136041633 · WhatsApp ↗</a></li>
+      </ul>
+      <div class="legal-links">
+        <button class="legal-trigger" type="button" data-open-tab="privacy">Privacy Policy</button>
+        <button class="legal-trigger" type="button" data-open-tab="terms">Terms &amp; Conditions</button>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<section id="shaft" class="stage">
+  <div class="shaft-tunnel" id="shaft-tunnel"></div>
+  <div id="drop-stage"></div>
+  <div class="shaft-depth-rail">
+    <span id="shaft-depth-label">DEPTH // 00m</span>
+    <div class="shaft-depth-bar"><div id="shaft-depth-fill"></div></div>
+    <span id="shaft-frame-indicator">01 / 06</span>
+  </div>
+  <div class="shaft-hud"><div id="fall-hint">↓ SCROLL TO FALL</div></div>
+</section>
+
+<section id="gallery" class="stage">
+  <div class="gallery-header">
+    <div class="gallery-folder-title" id="gallery-folder-title">OBJECTS · 11 FRAMES</div>
+    <div class="reel-controls">
+      <button class="ui-pill" id="reel-prev-btn">← PREV</button>
+      <button class="ui-pill" id="reel-next-btn">NEXT →</button>
+    </div>
+  </div>
+  <div class="reel-viewport" id="reel-viewport"><div class="reel-track" id="reel-track"></div></div>
+  <div class="reel-progress-bar"><span id="reel-progress-thumb"></span></div>
+</section>
+
+<div id="focus-modal"><div class="focus-box poster-frame" id="focus-box"></div><div class="focus-meta" id="focus-meta">CLICK TO CLOSE</div></div>
+
+<aside id="studio-drawer">
+  <div class="drawer-panel">
+    <div class="drawer-top">
+      <div class="drawer-tabs">
+        <button class="drawer-tab active" data-tab="contact">CONTACT</button>
+        <button class="drawer-tab" data-tab="privacy">PRIVACY</button>
+        <button class="drawer-tab" data-tab="terms">TERMS</button>
+        <button class="drawer-tab" data-tab="notfound">404</button>
+      </div>
+      <button class="ui-pill" id="close-drawer-btn">CLOSE ✕</button>
+    </div>
+    <div class="drawer-section active" id="tab-contact">
+      <h2>STUDIO INQUIRY</h2>
+      <p>Available for poster commissions, visual direction, and Figma design systems.</p>
+      <ul class="drawer-contact-list">
+        <li><a href="https://www.linkedin.com/in/amey-nair-130328428/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
+        <li><a href="https://instagram.com/yourstruly.amey" target="_blank" rel="noopener noreferrer">Instagram ↗</a></li>
+        <li><a href="mailto:ameynair737@gmail.com?subject=FashionVault%20enquiry">ameynair737@gmail.com</a></li>
+        <li><a href="https://wa.me/919136041633" target="_blank" rel="noopener noreferrer">9136041633 · WhatsApp ↗</a></li>
+      </ul>
+      <p style="font-family:var(--font-mono);font-size:12px;color:var(--muted);margin-top:8px">STUDIO: Mumbai, Maharashtra, India</p>
+    </div>
+    <div class="drawer-section" id="tab-privacy">
+      <h2>PRIVACY POLICY</h2>
+      <p>THE FLOOR respects your privacy. Contact details are used solely to respond to commissions and are never shared.</p>
+      <p>Minimal local storage remembers cookie consent only.</p>
+    </div>
+    <div class="drawer-section" id="tab-terms">
+      <h2>TERMS &amp; CONDITIONS</h2>
+      <p>All posters are original works by Amey Nair.</p>
+      <p>Unauthorized reproduction without permission is prohibited.</p>
+    </div>
+    <div class="drawer-section" id="tab-notfound">
+      <h2>404 // HATCH NOT FOUND</h2>
+      <p>This frame does not exist on THE FLOOR.</p>
+      <button class="ui-pill" type="button" id="drawer-return-btn">← BACK</button>
+    </div>
+  </div>
+</aside>
+
+<div id="cookie-banner"><p>THE FLOOR uses minimal local storage.</p><button class="ui-pill" id="accept-cookies-btn">ACCEPT</button></div>
+
+<script>
+/* ============================================================
+   HOW TO MANAGE THE FLOOR
+   ============================================================
+
+   IMAGE FOLDERS (on your laptop):
+   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\studies\
+   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\pokemon\
+   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\objects\
+   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\femme\
+   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\masc\
+   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\about\
+
+   ADD A POSTER:
+   1. Put file in the correct posters/<folder>/ directory
+      e.g. posters/pokemon/blastoise.png
+   2. Add the name WITHOUT extension into that folder's posters array below
+      posters: [..., "blastoise"]
+   3. Save + refresh
+   → Site auto-sorts A–Z (natural order). Order in the array does not matter.
+
+   ADD A NEW FOLDER:
+   1. Create posters/newfolder/
+   2. Add images there
+   3. Copy a folder object below and edit:
+      {
+        id: "newfolder",          // lowercase, matches folder path
+        name: "NEW FOLDER",       // display label on trapdoor
+        // seam: "#FF8B5C",       // OPTIONAL color. If omitted, auto-picked
+        path: "posters/newfolder/",
+        posters: ["one", "two"]
+      }
+   4. Keep ABOUT ME as id:"about" if you want the top-left text link.
+      Any other folder joins the infinite scroller automatically.
+
+   ABOUT ME:
+   - Special. Not in the scroller.
+   - Top-left tilted text button.
+   - Uses id: "about"
+
+   SEAM COLORS:
+   - If you set seam, that color is used.
+   - If you omit seam, color is taken from SEAM_PALETTE by folder index.
+   ============================================================ */
+
+const SEAM_PALETTE = [
+  "#F2E5A3", // warm pencil
+  "#F2F06B", // electric yellow
+  "#5EEAD4", // cyan
+  "#F2B5C4", // dusty rose
+  "#B9CDEB", // steel blue
+  "#FF8B5C", // coral
+  "#C4B5FD", // soft violet
+  "#86EFAC", // mint
+  "#FCA5A5", // soft red
+  "#93C5FD"  // sky
+];
+
+// RAW DATA — write poster names here (any order). Sorted automatically.
+const RAW_FOLDERS = [
+  {
+    id: "studies",
+    name: "STUDIES",
+    seam: "#F2E5A3",
+    path: "posters/studies/",
+    posters: ["Study01","Study02","Study03","Study04","Study05","Study06","Study07","Study08","Study09","Study10","Study11","Study12","Study13","Study14","Study15"]
+  },
+  {
+    id: "pokemon",
+    name: "POKEMON",
+    seam: "#F2F06B",
+    path: "posters/pokemon/",
+    posters: ["alakazam","arcanine","articuno","celebi","charizard","dragonite","gardevoir","gengar","gyarados","houndoom","lapras","machamp","metagross","mew","salamance","snorlax","typhlosion","umbreon"]
+  },
+  {
+    id: "objects",
+    name: "OBJECTS",
+    seam: "#5EEAD4",
+    path: "posters/objects/",
+    posters: ["chandelier","concrete stairwell","dice","fencing mask","heart","hydraulic manifold block","microscope","night Shade","phalanx","satellite","turbojet"]
+  },
+  {
+    id: "femme",
+    name: "FEMME",
+    seam: "#F2B5C4",
+    path: "posters/femme/",
+    posters: ["bubblegum","calling","cd","daisies","fashion","her","kali","pink vines","raaatatata","sun kissed",]
+  },
+  {
+    id: "masc",
+    name: "MASC",
+    seam: "#B9CDEB",
+    path: "posters/masc/",
+    posters: ["26","afrofuturist crown","bound","cold shoulder","drip","eyes dont lie","fallen star","idc","leap","reflections","Watermelon"]
+  },
+  {
+    id: "about",
+    name: "ABOUT ME",
+    seam: "#F5F5F5",
+    path: "posters/about/",
+    posters: ["intro","bio","contact"]
+  }
+];
+
+// Build final FOLDERS: auto seam + alphabetical posters
+const FOLDERS = RAW_FOLDERS.map((folder, index) => {
+  const posters = [...folder.posters].sort((a, b) =>
+    String(a).localeCompare(String(b), undefined, { sensitivity: "base", numeric: true })
+  );
+  return {
+    id: folder.id,
+    name: folder.name,
+    path: folder.path.endsWith("/") ? folder.path : folder.path + "/",
+    seam: folder.seam || SEAM_PALETTE[index % SEAM_PALETTE.length],
+    posters
+  };
+});
+
+const $ = (s) => document.querySelector(s);
+const pad = (n) => String(n).padStart(2, "0");
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+function getCandidatePaths(folder, rawName, index) {
+  const exact = String(rawName).trim();
+  const lower = exact.toLowerCase();
+  const upper = exact.toUpperCase();
+  const cap = exact.charAt(0).toUpperCase() + exact.slice(1).toLowerCase();
+  const dashed = lower.replace(/\s+/g, "-");
+  const underscored = lower.replace(/\s+/g, "_");
+  const num = pad(index + 1);
+  const stems = [exact, lower, cap, upper, dashed, underscored, `${num}-${dashed}`, `${num}-${exact}`, `${num}_${lower}`];
+  const exts = ["webp", "png", "jpg", "jpeg", "PNG", "JPG"];
+  const list = [];
+  stems.forEach((s) => exts.forEach((x) => list.push(`${folder.path}${s}.${x}`)));
+  return [...new Set(list)];
+}
+
+function attachMultiTryImage(img, folder, rawName, index) {
+  const c = getCandidatePaths(folder, rawName, index);
+  let i = 0;
+  const next = () => {
+    if (i >= c.length) { img.style.display = "none"; return; }
+    img.src = encodeURI(c[i++]);
+  };
+  img.onerror = next;
+  next();
+}
+
+function populatePosterFrame(frameEl, folder, rawName, index) {
+  frameEl.innerHTML = "";
+  const title = String(rawName).toUpperCase();
+  const fb = document.createElement("div");
+  fb.className = "poster-fallback";
+  fb.innerHTML = `<div class="poster-fallback-top">${pad(index + 1)}/${pad(folder.posters.length)}·${folder.name}</div><div><div class="poster-fallback-title">${title}</div><div class="poster-fallback-bar" style="background:${folder.seam}"></div><div class="poster-fallback-path">${folder.path}${rawName}.png</div></div><div class="poster-fallback-top">1080×1350</div>`;
+  const img = new Image();
+  img.alt = `${title} by Amey Nair`;
+  img.width = 1080; img.height = 1350;
+  img.loading = "lazy"; img.decoding = "async";
+  img.onload = () => { fb.style.display = "none"; img.style.display = "block"; };
+  frameEl.appendChild(fb); frameEl.appendChild(img);
+  attachMultiTryImage(img, folder, rawName, index);
+}
+
+function updatePageMeta(t, d) {
+  document.title = t;
+  const m = $("#meta-desc");
+  if (m) m.setAttribute("content", d);
+}
+
+let loaderFinished = false;
+function initLoader() {
+  const desk = $("#loader-desk"), counter = $("#loader-counter");
+  desk.innerHTML = "";
+  const lf = FOLDERS.filter((f) => f.id !== "about");
+  lf.forEach((f, i) => {
+    const card = document.createElement("div");
+    card.className = "deal-card";
+    card.style.zIndex = String(10 - i);
+    card.innerHTML = `<div class="deal-card-crop" style="border-bottom:2px solid ${f.seam}"><img alt="${f.name}" /></div><div class="deal-card-top"><span class="deal-card-name">${f.name}</span><span class="deal-card-dot" style="background:${f.seam};color:${f.seam}"></span></div><div class="deal-card-foot">TD ${pad(i + 1)}//${pad(f.posters.length)} FRAMES</div>`;
+    attachMultiTryImage(card.querySelector("img"), f, f.posters[0], 0);
+    desk.appendChild(card);
+  });
+  const steps = [[0,45],[5,55],[8,55],[11,60],[19,60],[24,60],[33,65],[48,65],[56,60],[68,60],[72,55],[77,60],[83,460],[89,65],[92,460],[95,70],[99,820],[100,180]];
+  const n = lf.length;
+  const fan = Array.from({ length: n }, (_, i) => {
+    const t = n === 1 ? 0.5 : i / (n - 1);
+    return { x: (t - 0.5) * 290, y: 12 - Math.sin(t * Math.PI) * 24, r: (t - 0.5) * 26 };
+  });
+  let phase = "deal", di = 0, slow = false;
+  function cycle() {
+    if (loaderFinished) return;
+    const cs = Array.from(desk.querySelectorAll(".deal-card"));
+    if (!cs.length) return;
+    if (phase === "deal") {
+      if (di < cs.length) {
+        const c = cs[di], p = fan[di];
+        c.style.zIndex = String(20 + di);
+        c.style.transform = `translate3d(${p.x}px,${p.y}px,0) rotate(${p.r}deg)`;
+        di++; setTimeout(cycle, slow ? 170 : 105);
+      } else { phase = "riffle"; setTimeout(cycle, slow ? 240 : 150); }
+    } else if (phase === "riffle") {
+      cs.forEach((c, i) => { c.style.transform = `translate3d(${i % 2 ? 42 : -42}px,${i * -2}px,0) rotate(${i % 2 ? 5 : -5}deg)`; });
+      phase = "gather"; setTimeout(cycle, slow ? 260 : 180);
+    } else {
+      desk.appendChild(cs[0]);
+      Array.from(desk.querySelectorAll(".deal-card")).forEach((c, i) => {
+        c.style.zIndex = String(15 - i);
+        c.style.transform = `translate3d(0,${i * 2}px,0) rotate(${(i - 2) * 0.6}deg)`;
+      });
+      di = 0; phase = "deal"; setTimeout(cycle, slow ? 240 : 150);
+    }
+  }
+  let si = 0;
+  function tick() {
+    if (loaderFinished || si >= steps.length) return;
+    const [v, w] = steps[si++];
+    counter.textContent = `${v}%`;
+    if (v === 99) slow = true;
+    if (v === 100) { completeLoader(); return; }
+    setTimeout(tick, w);
+  }
+  cycle(); tick();
+}
+function completeLoader() {
+  if (loaderFinished) return; loaderFinished = true;
+  const cs = Array.from(document.querySelectorAll(".deal-card"));
+  const n = cs.length, uc = Math.ceil(n / 2), dc = n - uc, mid = (n - 1) / 2;
+  cs.forEach((c, i) => {
+    const up = i < uc;
+    const xs = (i - mid) * 78;
+    const yt = up ? -820 : 820;
+    const r = up ? (i - (uc - 1) / 2) * 9 : (i - uc - (dc - 1) / 2) * 9;
+    c.style.transition = "transform 1.05s cubic-bezier(.22,.61,.36,1),opacity .85s ease";
+    c.style.transform = `translate3d(${xs}px,${yt}px,0) rotate(${r}deg)`;
+    c.style.opacity = "0";
+  });
+  setTimeout(() => {
+    const l = $("#loader"); l.style.opacity = "0"; showFloorStage();
+    setTimeout(() => { l.style.display = "none"; }, 500);
+  }, 980);
+}
+
+const state = {
+  view: "loader", activeFolder: null, activeDoorCloneIndex: 6, scrollerFolders: [],
+  laneX: 0, laneTarget: 0, singleSetWidth: 0,
+  laneDragging: false, laneStartX: 0, laneBaseTarget: 0, lanePointerMoved: false,
+  dropY: 0, dropTarget: 0, dropSpacing: 860, dropItems: [], shaftRings: [],
+  reelX: 0, reelTarget: 0, reelMin: 0,
+  reelDragging: false, reelStartX: 0, reelBaseTarget: 0, reelPointerMoved: false
+};
+
+function buildFloorLane() {
+  const t = $("#lane-track"); t.innerHTML = "";
+  state.scrollerFolders = FOLDERS.filter((f) => f.id !== "about");
+  [...state.scrollerFolders, ...state.scrollerFolders, ...state.scrollerFolders].forEach((f, ix) => {
+    const ri = ix % state.scrollerFolders.length;
+    const d = document.createElement("article");
+    d.className = "trapdoor";
+    d.dataset.folderId = f.id;
+    d.dataset.cloneIdx = String(ix);
+    d.style.setProperty("--seam", f.seam);
+    d.innerHTML = `<div class="trapdoor-seam"></div><div class="trapdoor-pit"><img class="trapdoor-pit-preview" alt="${f.name}"/></div><div class="trapdoor-lid"><div class="trapdoor-hinges"><span class="hinge"></span><span class="hinge"></span></div><div class="trapdoor-header"><span class="trapdoor-title">${f.name}</span><span class="trapdoor-Dot"></span></div><div class="trapdoor-footer"><span class="trapdoor-count">TD ${pad(ri + 1)}//${pad(f.posters.length)} Frames</span><div class="trapdoor-handle"></div></div></div>`;
+    attachMultiTryImage(d.querySelector(".trapdoor-pit-preview"), f, f.posters[0], 0);
+    t.appendChild(d);
+  });
+  requestAnimationFrame(measureInfiniteLane);
+}
+function measureInfiniteLane() {
+  const ds = $("#lane-track").querySelectorAll(".trapdoor");
+  const sz = state.scrollerFolders.length || 1;
+  if (ds.length < sz * 2) return;
+  state.singleSetWidth = ds[sz].getBoundingClientRect().left - ds[0].getBoundingClientRect().left;
+  if (state.laneX === 0 && state.singleSetWidth > 0) {
+    state.laneX = -state.singleSetWidth;
+    state.laneTarget = -state.singleSetWidth;
+  }
+}
+function wrapInfiniteLane() {
+  const w = state.singleSetWidth; if (!w) return;
+  if (state.laneX > -w * 0.35) { state.laneX -= w; state.laneTarget -= w; }
+  else if (state.laneX < -w * 1.65) { state.laneX += w; state.laneTarget += w; }
+}
+function showFloorStage() {
+  state.view = "floor";
+  $("#back-to-floor-btn").style.display = "none";
+  $("#open-drawer-btn").style.display = "inline-flex";
+  updatePageMeta("THE FLOOR — Amey Nair | 1080×1350 Visual Archive", "THE FLOOR — curated archive.");
+  const f = $("#floor"); f.style.display = "flex";
+  if (!$("#lane-track").children.length) buildFloorLane(); else measureInfiniteLane();
+}
+function hideLaneHint() { const h = $("#lane-hint"); if (h) h.style.opacity = "0"; }
+
+const lw = $("#lane-wrapper");
+lw.addEventListener("pointerdown", (e) => {
+  if (state.view !== "floor") return;
+  state.laneDragging = true; state.laneStartX = e.clientX; state.laneBaseTarget = state.laneTarget;
+  state.lanePointerMoved = false; lw.classList.add("dragging");
+});
+window.addEventListener("pointermove", (e) => {
+  if (state.laneDragging && state.view === "floor") {
+    const dx = e.clientX - state.laneStartX;
+    if (Math.abs(dx) > 6) { state.lanePointerMoved = true; hideLaneHint(); }
+    state.laneTarget = state.laneBaseTarget + dx;
+  }
+  if (state.reelDragging && state.view === "gallery") {
+    const dx = e.clientX - state.reelStartX;
+    if (Math.abs(dx) > 6) state.reelPointerMoved = true;
+    state.reelTarget = clamp(state.reelBaseTarget + dx, state.reelMin, 0);
+  }
+});
+window.addEventListener("pointerup", (e) => {
+  if (state.laneDragging) {
+    state.laneDragging = false; lw.classList.remove("dragging");
+    if (!state.lanePointerMoved && state.view === "floor") {
+      const d = e.target.closest(".trapdoor");
+      if (d) {
+        const f = FOLDERS.find((x) => x.id === d.dataset.folderId);
+        if (f) openTrapdoorSequence(f, d);
+      }
+    }
+  }
+  if (state.reelDragging) {
+    state.reelDragging = false; $("#reel-viewport").classList.remove("dragging");
+    if (!state.reelPointerMoved && state.view === "gallery") {
+      const c = e.target.closest(".reel-card");
+      if (c && state.activeFolder) openFocusModal(state.activeFolder, state.activeFolder.posters[+c.dataset.index], +c.dataset.index);
+    }
+  }
+});
+
+function openTrapdoorSequence(folder, doorEl) {
+  if (state.view !== "floor") return;
+  state.view = "opening"; state.activeFolder = folder;
+  const isAbout = doorEl.id === "about-me-link";
+  state.activeDoorCloneIndex = isAbout ? -1 : +(doorEl.dataset.cloneIdx || 0);
+  if (!isAbout && doorEl.getBoundingClientRect) {
+    const r = doorEl.getBoundingClientRect();
+    state.laneTarget += (innerWidth / 2) - (r.left + r.width / 2);
+  }
+  if (doorEl.classList && doorEl.classList.contains("trapdoor")) doorEl.classList.add("is-open");
+  const floor = $("#floor");
+  setTimeout(() => {
+    floor.style.transition = "transform .65s cubic-bezier(.5,0,.2,1),opacity .55s ease";
+    floor.style.transform = "scale(2.2) translateY(-8%)"; floor.style.opacity = "0";
+  }, 300);
+  setTimeout(() => {
+    floor.style.display = "none"; floor.style.transition = ""; floor.style.transform = ""; floor.style.opacity = "1";
+    if (doorEl.classList && doorEl.classList.contains("trapdoor")) doorEl.classList.remove("is-open");
+    startDropSequence(folder);
+  }, 920);
+}
+
+function buildShaftTunnel(seam) {
+  const t = $("#shaft-tunnel"); t.innerHTML = ""; state.shaftRings = [];
+  for (let i = 0; i < 7; i++) {
+    const r = document.createElement("div"); r.className = "shaft-ring"; r.style.borderColor = seam;
+    t.appendChild(r); state.shaftRings.push(r);
+  }
+}
+function startDropSequence(folder) {
+  state.view = "shaft"; state.dropY = 0; state.dropTarget = 0; state.dropItems = [];
+  $("#back-to-floor-btn").style.display = "inline-flex";
+  $("#open-drawer-btn").style.display = "inline-flex";
+  $("#fall-hint").style.opacity = "1";
+  updatePageMeta(`${folder.name} — THE FLOOR`, `${folder.posters.length} posters.`);
+  buildShaftTunnel(folder.seam);
+  const s = $("#drop-stage"); s.innerHTML = "";
+  const cnt = folder.id === "about" ? folder.posters.length : Math.min(6, folder.posters.length);
+  folder.posters.slice(0, cnt).forEach((rn, ix) => {
+    const it = document.createElement("article"); it.className = "drop-item";
+    const fr = document.createElement("div"); fr.className = "poster-frame";
+    populatePosterFrame(fr, folder, rn, ix);
+    const cp = document.createElement("div"); cp.className = "drop-caption";
+    cp.innerHTML = `<strong class="drop-caption-title">${String(rn).toUpperCase()}</strong><span class="drop-caption-meta">${pad(ix + 1)}/${pad(folder.posters.length)}·${folder.name}</span>`;
+    it.appendChild(fr); it.appendChild(cp);
+    it.addEventListener("click", () => { if (it.classList.contains("is-centered")) openFocusModal(folder, rn, ix); });
+    s.appendChild(it); state.dropItems.push({ el: it, caption: cp, idx: ix });
+  });
+  $("#shaft").style.display = "block";
+}
+function enterGalleryReel(folder) {
+  state.view = "gallery"; state.reelX = 0; state.reelTarget = 0;
+  $("#shaft").style.display = "none";
+  $("#back-to-floor-btn").style.display = "inline-flex";
+  $("#open-drawer-btn").style.display = "inline-flex";
+  $("#gallery-folder-title").textContent = `${folder.name}·${pad(folder.posters.length)} FRAMES`;
+  const tr = $("#reel-track"); tr.innerHTML = "";
+  folder.posters.forEach((rn, ix) => {
+    const c = document.createElement("article"); c.className = "reel-card"; c.dataset.index = String(ix);
+    const fr = document.createElement("div"); fr.className = "poster-frame";
+    populatePosterFrame(fr, folder, rn, ix);
+    const cp = document.createElement("div"); cp.className = "reel-card-caption";
+    cp.innerHTML = `<span class="reel-card-name">${String(rn).toUpperCase()}</span><span class="reel-card-num">${pad(ix + 1)}/${pad(folder.posters.length)}</span>`;
+    c.appendChild(fr); c.appendChild(cp); tr.appendChild(c);
+  });
+  $("#gallery").style.display = "block";
+  requestAnimationFrame(measureReelBounds);
+}
+function measureReelBounds() {
+  const vp = $("#reel-viewport"), tr = $("#reel-track");
+  if (!vp || !tr) return;
+  state.reelMin = Math.min(0, vp.clientWidth - tr.scrollWidth);
+  state.reelTarget = clamp(state.reelTarget, state.reelMin, 0);
+}
+$("#reel-viewport").addEventListener("pointerdown", (e) => {
+  if (state.view !== "gallery") return;
+  state.reelDragging = true; state.reelStartX = e.clientX; state.reelBaseTarget = state.reelTarget;
+  state.reelPointerMoved = false; $("#reel-viewport").classList.add("dragging");
+});
+$("#reel-prev-btn").addEventListener("click", () => { state.reelTarget = clamp(state.reelTarget + 420, state.reelMin, 0); });
+$("#reel-next-btn").addEventListener("click", () => { state.reelTarget = clamp(state.reelTarget - 420, state.reelMin, 0); });
+
+function returnToFloor() {
+  if (state.view !== "shaft" && state.view !== "gallery") return;
+  state.view = "returning"; closeFocusModal();
+  $("#shaft").style.display = "none"; $("#gallery").style.display = "none";
+  $("#back-to-floor-btn").style.display = "none"; $("#open-drawer-btn").style.display = "inline-flex";
+  const floor = $("#floor"); floor.style.display = "flex"; measureInfiniteLane();
+  const isA = state.activeFolder?.id === "about";
+  const td = isA ? null : (document.querySelector(`.trapdoor[data-clone-idx="${state.activeDoorCloneIndex}"]`) || document.querySelector(`.trapdoor[data-folder-id="${state.activeFolder?.id}"]`));
+  if (td) {
+    const r = td.getBoundingClientRect();
+    state.laneTarget += innerWidth / 2 - (r.left + r.width / 2);
+    state.laneX = state.laneTarget;
+    $("#lane-track").style.transform = `translate3d(${state.laneX}px,-50%,0)`;
+    td.classList.add("is-open");
+  }
+  floor.style.transform = "scale(1.28)"; floor.style.opacity = "0";
+  requestAnimationFrame(() => {
+    floor.style.transition = "transform .65s cubic-bezier(.22,1,.36,1),opacity .45s ease";
+    floor.style.transform = "scale(1)"; floor.style.opacity = "1";
+  });
+  setTimeout(() => { if (td) td.classList.remove("is-open"); }, 240);
+  setTimeout(() => { floor.style.transition = ""; state.view = "floor"; }, 700);
+}
+$("#back-to-floor-btn").addEventListener("click", returnToFloor);
+
+function openFocusModal(f, rn, ix) {
+  populatePosterFrame($("#focus-box"), f, rn, ix);
+  $("#focus-meta").textContent = `${String(rn).toUpperCase()} — ${pad(ix + 1)}/${pad(f.posters.length)} · ${f.name} (CLICK TO CLOSE)`;
+  $("#focus-modal").style.display = "flex";
+}
+function closeFocusModal() { $("#focus-modal").style.display = "none"; }
+$("#focus-modal").addEventListener("click", closeFocusModal);
+
+$("#about-me-link").addEventListener("click", () => {
+  if (state.view === "floor") {
+    const af = FOLDERS.find((f) => f.id === "about");
+    if (af) openTrapdoorSequence(af, $("#about-me-link"));
+  }
+});
+
+function masterTick() {
+  if (state.view === "floor" || state.view === "opening") {
+    state.laneX += (state.laneTarget - state.laneX) * 0.12;
+    wrapInfiniteLane();
+    $("#lane-track").style.transform = `translate3d(${state.laneX}px,-50%,0)`;
+  }
+  if (state.view === "shaft") {
+    state.dropY += (state.dropTarget - state.dropY) * 0.095;
+    const ts = Math.max(1, (state.dropItems.length - 1) * state.dropSpacing), md = ts + 560;
+    $("#shaft-depth-label").textContent = `DEPTH//${pad(Math.round(state.dropY / 18))}m`;
+    $("#shaft-depth-fill").style.height = `${clamp((state.dropY / md) * 100, 0, 100)}%`;
+    const ai = clamp(Math.round(state.dropY / state.dropSpacing) + 1, 1, state.dropItems.length || 1);
+    $("#shaft-frame-indicator").textContent = `${pad(ai)}/${pad(state.dropItems.length || 1)}`;
+    state.shaftRings.forEach((r, ri) => {
+      const cy = ((state.dropY * 1.35 + ri * 260) % 1820) / 1820;
+      const z = -1500 + cy * 1950, ys = (0.5 - cy) * 220;
+      const al = cy < 0.15 ? cy / 0.15 : (cy > 0.82 ? (1 - cy) / 0.18 : 1);
+      r.style.opacity = String(al * 0.22);
+      r.style.transform = `translate3d(-50%,calc(-50% + ${ys}px),${z}px)`;
+    });
+    if (state.dropY > md && state.activeFolder) enterGalleryReel(state.activeFolder);
+    else {
+      state.dropItems.forEach((item, i) => {
+        const rel = state.dropY - i * state.dropSpacing, hold = 145;
+        let z = 0, y = 0, x = 0, rx = 0, rz = 0, op = 1, br = 1;
+        const sd = i % 2 ? -1 : 1;
+        if (Math.abs(rel) <= hold) {
+          const t = rel / hold; z = t * 35; y = -t * 18; x = sd * (1 - Math.cos(t * Math.PI * 0.5)) * 8; rx = -t * 2.5;
+        } else if (rel < -hold) {
+          const ap = Math.abs(rel + hold), nm = clamp(ap / 1500, 0, 1);
+          z = -ap * 0.92; y = Math.min(340, ap * 0.34); x = sd * Math.min(130, ap * 0.11);
+          rx = clamp(ap * 0.018, 0, 18); rz = sd * clamp(ap * 0.005, 0, 4);
+          op = clamp(1 - nm * 0.92, 0, 0.88); br = clamp(1 - nm * 0.65, 0.3, 1);
+        } else {
+          const ps = rel - hold; z = 35 + ps * 0.78; y = -18 - ps * 1.18; x = sd * Math.min(90, ps * 0.12);
+          rx = -clamp(ps * 0.028, 0, 16); op = clamp(1 - ps / 390, 0, 1);
+        }
+        const cen = Math.abs(rel) <= hold + 30;
+        item.el.classList.toggle("is-centered", cen);
+        item.el.style.opacity = String(op);
+        item.el.style.filter = br < 0.99 ? `brightness(${br})` : "none";
+        item.el.style.zIndex = String(200 - i * 10 + (cen ? 50 : 0));
+        item.el.style.transform = `translate3d(calc(-50% + ${x}px),calc(-50% + ${y}px),${z}px) rotateX(${rx}deg) rotateZ(${rz}deg)`;
+        item.caption.style.opacity = cen ? "1" : "0";
+      });
+    }
+  }
+  if (state.view === "gallery") {
+    state.reelX += (state.reelTarget - state.reelX) * 0.12;
+    $("#reel-track").style.transform = `translate3d(${state.reelX}px,-50%,0)`;
+    const rg = Math.abs(state.reelMin) || 1;
+    $("#reel-progress-thumb").style.transform = `translateX(${clamp(Math.abs(state.reelX) / rg, 0, 1) * 300}%)`;
+  }
+  requestAnimationFrame(masterTick);
+}
+
+window.addEventListener("wheel", (e) => {
+  if ($("#studio-drawer").style.display === "flex") return;
+  const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  if (state.view === "floor") { e.preventDefault(); state.laneTarget -= d * 1.15; hideLaneHint(); }
+  else if (state.view === "shaft") { e.preventDefault(); $("#fall-hint").style.opacity = "0"; state.dropTarget = Math.max(0, state.dropTarget + d * 1.05); }
+  else if (state.view === "gallery") { e.preventDefault(); state.reelTarget = clamp(state.reelTarget - d * 1.15, state.reelMin, 0); }
+}, { passive: false });
+
+let tsy = 0;
+$("#shaft").addEventListener("touchstart", (e) => { tsy = e.touches[0].clientY; }, { passive: true });
+$("#shaft").addEventListener("touchmove", (e) => {
+  if (state.view !== "shaft") return;
+  const dy = tsy - e.touches[0].clientY; tsy = e.touches[0].clientY;
+  $("#fall-hint").style.opacity = "0"; state.dropTarget = Math.max(0, state.dropTarget + dy * 1.8);
+}, { passive: true });
+window.addEventListener("resize", () => { measureInfiniteLane(); measureReelBounds(); });
+
+function openDrawer(t = "contact") { $("#studio-drawer").style.display = "flex"; swTab(t); }
+function closeDrawer() { $("#studio-drawer").style.display = "none"; }
+function swTab(t) {
+  document.querySelectorAll(".drawer-tab").forEach((b) => b.classList.toggle("active", b.dataset.tab === t));
+  document.querySelectorAll(".drawer-section").forEach((s) => s.classList.toggle("active", s.id === `tab-${t}`));
+}
+$("#open-drawer-btn").addEventListener("click", () => openDrawer("contact"));
+$("#close-drawer-btn").addEventListener("click", closeDrawer);
+$("#drawer-return-btn").addEventListener("click", closeDrawer);
+document.querySelectorAll(".drawer-tab").forEach((b) => b.addEventListener("click", () => swTab(b.dataset.tab)));
+document.querySelectorAll("[data-open-tab]").forEach((b) => b.addEventListener("click", () => openDrawer(b.getAttribute("data-open-tab"))));
+if (!localStorage.getItem("tf_ck")) $("#cookie-banner").style.display = "flex";
+$("#accept-cookies-btn").addEventListener("click", () => { localStorage.setItem("tf_ck", "1"); $("#cookie-banner").style.display = "none"; });
+window.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeFocusModal(); closeDrawer(); } });
+window.addEventListener("DOMContentLoaded", () => { initLoader(); requestAnimationFrame(masterTick); });
+</script>
+</body>
+</html>
