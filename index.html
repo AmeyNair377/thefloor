@@ -10,14 +10,18 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="THE FLOOR — Amey Nair" />
 <meta property="og:description" content="i made these inside my head. now they live on the floor." />
-<meta property="og:image" content="posters/objects/dice.png" />
+<meta property="og:image" content="https://thefloor-fk2c.onrender.com/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://thefloor-fk2c.onrender.com/" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thefloor-fk2c.onrender.com/og-image.jpg" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231E1E1E'/%3E%3Crect x='12' y='8' width='40' height='48' fill='%23262626' stroke='%235EEAD4' stroke-width='3'/%3E%3C/svg%3E" />
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@800&display=swap" as="style" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Reenie+Beanie&family=Syne:wght@800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Reenie+Beanie&family=Syne:wght@800&display=swap" rel="stylesheet" /></noscript>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=JetBrains+Mono:wght@400;500;700&family=Reenie+Beanie&family=Syne:wght@800&display=swap" as="style" />
+<link id="gf" href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=JetBrains+Mono:wght@400;500;700&family=Reenie+Beanie&family=Syne:wght@800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+<noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=JetBrains+Mono:wght@400;500;700&family=Reenie+Beanie&family=Syne:wght@800&display=swap" rel="stylesheet" /></noscript>
 <style>
 :root{
   --bg:#1E1E1E;--shaft:#141414;--text:#EDEAE4;--muted:#A8A29E;--border:rgba(237,234,228,.14);
@@ -297,6 +301,8 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
       posters: [..., "blastoise"]
    3. Save + refresh
    → Site auto-sorts A–Z (natural order). Order in the array does not matter.
+   → Use .webp files (quality ~80-85). The site tries .webp first, then .png/.jpg.
+   → Images are preloaded in the background automatically. Nothing else to do.
    → EXCEPTION: a folder with keepOrder: true is NOT sorted. It shows
      posters in exactly the order you write them in the array.
      (ABOUT ME uses this: intro → bio → contact.)
@@ -416,6 +422,15 @@ const elDepthFill = $("#shaft-depth-fill");
 const elFrameInd = $("#shaft-frame-indicator");
 const elReelViewport = $("#reel-viewport");
 
+/* ---------- Poster resolver + cache ----------
+   Each poster is resolved ONCE (its real file name/extension is found and the file is
+   downloaded into the browser cache). Everything else (loader cards, trapdoor previews,
+   the falling shaft, the reel, the focus modal) reuses that result. */
+const posterPromises = new Map(); // key -> Promise<string|null>
+const posterSrc = new Map();      // key -> resolved src (once known)
+const extHint = {};               // folder.id -> extension that worked last (tried first next time)
+const posterKey = (folder, rawName) => folder.id + "/" + rawName;
+
 function getCandidatePaths(folder, rawName, index) {
   const exact = String(rawName).trim();
   const lower = exact.toLowerCase();
@@ -425,24 +440,51 @@ function getCandidatePaths(folder, rawName, index) {
   const underscored = lower.replace(/\s+/g, "_");
   const num = pad(index + 1);
   const stems = [exact, lower, cap, upper, dashed, underscored, `${num}-${dashed}`, `${num}-${exact}`, `${num}_${lower}`];
-  const exts = ["webp", "png", "jpg", "jpeg", "PNG", "JPG"];
+  const baseExts = ["webp", "png", "jpg", "jpeg", "PNG", "JPG"];
+  const hint = extHint[folder.id];
+  const exts = hint && baseExts.includes(hint) ? [hint, ...baseExts.filter((x) => x !== hint)] : baseExts;
   const list = [];
   stems.forEach((s) => exts.forEach((x) => list.push(`${folder.path}${s}.${x}`)));
   return [...new Set(list)];
 }
 
-function attachMultiTryImage(img, folder, rawName, index) {
-  const c = getCandidatePaths(folder, rawName, index);
-  let i = 0;
-  const next = () => {
-    if (i >= c.length) { img.style.display = "none"; return; }
-    img.src = encodeURI(c[i++]);
-  };
-  img.onerror = next;
-  next();
+function resolvePoster(folder, rawName, index) {
+  const key = posterKey(folder, rawName);
+  if (posterPromises.has(key)) return posterPromises.get(key);
+  const p = new Promise((resolve) => {
+    const c = getCandidatePaths(folder, rawName, index);
+    let i = 0;
+    const next = () => {
+      if (i >= c.length) { resolve(null); return; }
+      const path = c[i++];
+      const probe = new Image();
+      probe.decoding = "async";
+      probe.onload = () => {
+        const m = path.match(/\.([A-Za-z0-9]+)$/);
+        if (m) extHint[folder.id] = m[1];
+        const src = encodeURI(path);
+        posterSrc.set(key, src);
+        resolve(src);
+      };
+      probe.onerror = next;
+      probe.src = encodeURI(path);
+    };
+    next();
+  });
+  posterPromises.set(key, p);
+  p.then((src) => { if (!src) posterPromises.delete(key); }); // allow a retry later if it failed
+  return p;
 }
 
-function populatePosterFrame(frameEl, folder, rawName, index) {
+function attachResolvedImage(img, folder, rawName, index) {
+  const known = posterSrc.get(posterKey(folder, rawName));
+  if (known) { img.src = known; return; }
+  resolvePoster(folder, rawName, index).then((src) => {
+    if (src) img.src = src; else img.style.display = "none";
+  });
+}
+
+function populatePosterFrame(frameEl, folder, rawName, index, eager = true) {
   frameEl.innerHTML = "";
   const title = String(rawName).toUpperCase();
   const fb = document.createElement("div");
@@ -451,10 +493,69 @@ function populatePosterFrame(frameEl, folder, rawName, index) {
   const img = new Image();
   img.alt = `${title} by Amey Nair`;
   img.width = 1080; img.height = 1350;
-  img.loading = "lazy"; img.decoding = "async";
+  img.loading = eager ? "eager" : "lazy"; img.decoding = "async";
   img.onload = () => { fb.style.display = "none"; img.style.display = "block"; };
   frameEl.appendChild(fb); frameEl.appendChild(img);
-  attachMultiTryImage(img, folder, rawName, index);
+  attachResolvedImage(img, folder, rawName, index);
+}
+
+/* ---------- Background preloader ----------
+   Order: (1) the first poster of every trapdoor (during the loading screen),
+          (2) the first 6 posters of every folder (what the falling shaft shows),
+          (3) ABOUT ME, (4) everything else.
+   Keeps going quietly while you sit on the landing page. Opening a trapdoor moves
+   that folder to the front of the queue. Skipped automatically on "Data Saver". */
+const netInfo = navigator.connection || {};
+const saveData = !!netInfo.saveData;
+const slowNet = /(^|-)2g$/.test(netInfo.effectiveType || "");
+const PRELOAD_CONCURRENCY = slowNet ? 1 : (window.matchMedia("(pointer:coarse)").matches ? 2 : 3);
+const bgQueue = [];
+let bgActive = 0, bgStarted = false;
+
+function buildBgQueue() {
+  const scroller = FOLDERS.filter((f) => f.id !== "about");
+  const about = FOLDERS.find((f) => f.id === "about");
+  const seen = new Set();
+  const add = (f, i) => {
+    const name = f.posters[i];
+    if (name === undefined) return;
+    const key = posterKey(f, name);
+    if (seen.has(key)) return;
+    seen.add(key);
+    bgQueue.push({ folder: f, name, index: i, key });
+  };
+  for (let r = 0; r < 6; r++) scroller.forEach((f) => add(f, r));
+  if (about) about.posters.forEach((_, i) => add(about, i));
+  scroller.forEach((f) => f.posters.forEach((_, i) => add(f, i)));
+}
+function pumpBg() {
+  while (bgActive < PRELOAD_CONCURRENCY && bgQueue.length) {
+    const it = bgQueue.shift();
+    if (posterPromises.has(it.key)) continue;
+    bgActive++;
+    resolvePoster(it.folder, it.name, it.index).finally(() => { bgActive--; pumpBg(); });
+  }
+}
+function startBackgroundPreload() {
+  if (bgStarted) return;
+  bgStarted = true;
+  if (!saveData) buildBgQueue();
+  pumpBg();
+}
+function prioritizeFolder(folder) {
+  const limit = saveData ? 6 : folder.posters.length;
+  const mine = [];
+  const have = new Set();
+  for (let k = bgQueue.length - 1; k >= 0; k--) {
+    if (bgQueue[k].folder === folder) { have.add(bgQueue[k].key); mine.push(bgQueue.splice(k, 1)[0]); }
+  }
+  folder.posters.slice(0, limit).forEach((name, i) => {
+    const key = posterKey(folder, name);
+    if (!have.has(key)) mine.push({ folder, name, index: i, key });
+  });
+  mine.sort((a, b) => a.index - b.index);
+  bgQueue.unshift(...mine);
+  pumpBg();
 }
 
 function updatePageMeta(t, d) {
@@ -464,7 +565,35 @@ function updatePageMeta(t, d) {
 }
 
 let loaderFinished = false;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// Waits for the Google Fonts stylesheet to be applied, then for the three display fonts to load.
+function fontsReady() {
+  return new Promise((resolve) => {
+    const t0 = performance.now();
+    (function wait() {
+      const l = $("#gf");
+      if ((l && l.media === "all") || performance.now() - t0 > 3000) {
+        if (document.fonts && document.fonts.load) {
+          Promise.all([
+            document.fonts.load("800 64px Syne"),
+            document.fonts.load("38px 'Reenie Beanie'"),
+            document.fonts.load("700 13px 'JetBrains Mono'")
+          ]).then(resolve, resolve);
+        } else resolve();
+      } else setTimeout(wait, 50);
+    })();
+  });
+}
+// "Critical" = fonts + the first poster of every trapdoor. Capped at 9s so the loader can never hang.
+function startCritical() {
+  const previews = FOLDERS.filter((f) => f.id !== "about").map((f) => resolvePoster(f, f.posters[0], 0));
+  const p = Promise.race([Promise.all([fontsReady(), ...previews]), sleep(9000)]);
+  p.then(startBackgroundPreload);
+  return p;
+}
+
 function initLoader() {
+  const critical = startCritical();
   const desk = $("#loader-desk"), counter = $("#loader-counter");
   desk.innerHTML = "";
   const lf = FOLDERS.filter((f) => f.id !== "about");
@@ -473,7 +602,7 @@ function initLoader() {
     card.className = "deal-card";
     card.style.zIndex = String(10 - i);
     card.innerHTML = `<div class="deal-card-crop" style="border-bottom:2px solid ${f.seam}"><img alt="${f.name}" /></div><div class="deal-card-top"><span class="deal-card-name">${f.name}</span><span class="deal-card-dot" style="background:${f.seam};color:${f.seam}"></span></div><div class="deal-card-foot">TD ${pad(i + 1)}//${pad(f.posters.length)} FRAMES</div>`;
-    attachMultiTryImage(card.querySelector("img"), f, f.posters[0], 0);
+    attachResolvedImage(card.querySelector("img"), f, f.posters[0], 0);
     desk.appendChild(card);
   });
   const steps = [[0,45],[5,55],[8,55],[11,60],[19,60],[24,60],[33,65],[48,65],[56,60],[68,60],[72,55],[77,60],[83,460],[89,65],[92,460],[95,70],[99,820],[100,180]];
@@ -511,8 +640,8 @@ function initLoader() {
     if (loaderFinished || si >= steps.length) return;
     const [v, w] = steps[si++];
     counter.textContent = `${v}%`;
-    if (v === 99) slow = true;
     if (v === 100) { completeLoader(); return; }
+    if (v === 99) { slow = true; critical.then(() => setTimeout(tick, w)); return; } // hold at 99% until fonts + previews are ready
     setTimeout(tick, w);
   }
   cycle(); tick();
@@ -560,7 +689,7 @@ function buildFloorLane() {
     d.dataset.cloneIdx = String(ix);
     d.style.setProperty("--seam", f.seam);
     d.innerHTML = `<div class="trapdoor-seam"></div><div class="trapdoor-pit"><img class="trapdoor-pit-preview" alt="${f.name}"/></div><div class="trapdoor-lid"><div class="trapdoor-hinges"><span class="hinge"></span><span class="hinge"></span></div><div class="trapdoor-header"><span class="trapdoor-title">${f.name}</span><span class="trapdoor-Dot"></span></div><div class="trapdoor-footer"><span class="trapdoor-count">TD ${pad(ri + 1)}//${pad(f.posters.length)} Frames</span><div class="trapdoor-handle"></div></div></div>`;
-    attachMultiTryImage(d.querySelector(".trapdoor-pit-preview"), f, f.posters[0], 0);
+    attachResolvedImage(d.querySelector(".trapdoor-pit-preview"), f, f.posters[0], 0);
     t.appendChild(d);
   });
   requestAnimationFrame(measureInfiniteLane);
@@ -652,6 +781,7 @@ window.addEventListener("pointercancel", () => {
 function openTrapdoorSequence(folder, doorEl) {
   if (state.view !== "floor") return;
   state.view = "opening"; state.activeFolder = folder;
+  prioritizeFolder(folder);
   const isAbout = doorEl.id === "about-me-link";
   state.activeDoorCloneIndex = isAbout ? -1 : +(doorEl.dataset.cloneIdx || 0);
   if (!isAbout && doorEl.getBoundingClientRect) {
@@ -710,7 +840,7 @@ function enterGalleryReel(folder) {
   folder.posters.forEach((rn, ix) => {
     const c = document.createElement("article"); c.className = "reel-card"; c.dataset.index = String(ix);
     const fr = document.createElement("div"); fr.className = "poster-frame";
-    populatePosterFrame(fr, folder, rn, ix);
+    populatePosterFrame(fr, folder, rn, ix, ix < 3);
     const cp = document.createElement("div"); cp.className = "reel-card-caption";
     cp.innerHTML = `<span class="reel-card-name">${String(rn).toUpperCase()}</span><span class="reel-card-num">${pad(ix + 1)}/${pad(folder.posters.length)}</span>`;
     c.appendChild(fr); c.appendChild(cp); tr.appendChild(c);
