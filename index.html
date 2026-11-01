@@ -60,7 +60,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
 .floor-stage{flex:1;position:relative;display:flex;align-items:center;min-height:0;padding:12px 0}
 .lane-wrapper{position:relative;width:100%;height:clamp(240px,35vh,350px);overflow:hidden;cursor:grab;touch-action:pan-y;mask-image:linear-gradient(90deg,transparent 0%,#000 7%,#000 93%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 7%,#000 93%,transparent 100%)}
 .lane-wrapper.dragging{cursor:grabbing}
-.lane-track{position:absolute;left:0;top:50%;display:flex;align-items:center;gap:clamp(32px,4vw,68px);transform:translate3d(0,-50%,0);will-change:transform;padding:0 clamp(20px,6vw,80px)}
+.lane-track{position:absolute;left:0;top:50%;display:flex;align-items:center;gap:clamp(32px,4vw,68px);transform:translate3d(0,-50%,0);will-change:transform;width:max-content;padding:0 clamp(24px,8vw,160px)}
 .trapdoor{--seam:#5EEAD4;position:relative;width:clamp(168px,13.5vw,220px);aspect-ratio:4/5;flex:0 0 auto;perspective:1100px;cursor:pointer}
 .trapdoor-seam{position:absolute;inset:-3px;border-radius:10px;border:2px solid var(--seam);box-shadow:0 0 14px var(--seam);opacity:.28;transition:opacity .35s,box-shadow .35s;pointer-events:none}
 .trapdoor-pit{position:absolute;inset:6px;border-radius:6px;background:radial-gradient(circle at 50% 35%,#191919,#050505 85%);box-shadow:inset 0 12px 32px rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -71,6 +71,10 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
 .trapdoor-header{display:flex;justify-content:space-between;align-items:center;z-index:3;gap:8px}
 .trapdoor-title{font-family:var(--font-mono);font-size:13px;font-weight:700;letter-spacing:.12em;color:#F5F3EF;text-shadow:0 2px 6px rgba(0,0,0,.8)}
 .trapdoor-Dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--seam);box-shadow:0 0 8px var(--seam)}
+.trapdoor-new{position:absolute;left:14px;top:42px;z-index:3;font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--seam);background:rgba(0,0,0,.4);border:1px solid var(--seam);border-radius:4px;padding:3px 7px;animation:newPulse 2.4s ease-in-out infinite}
+@keyframes newPulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 10px var(--seam)}}
+@media(prefers-reduced-motion:reduce){.trapdoor-new{animation:none}}
+.new-tag{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.14em;border:1px solid currentColor;border-radius:3px;padding:1px 5px;margin-right:8px}
 .trapdoor-footer{display:flex;flex-direction:column;gap:8px;z-index:3}
 .trapdoor-count{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:#D6D3CD}
 .trapdoor-handle{width:48px;height:7px;margin:0 auto;border-radius:999px;background:#0b0a0a;border:1px solid rgba(255,255,255,.1)}
@@ -146,6 +150,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
   .poster-frame{box-shadow:0 14px 36px rgba(0,0,0,.8)}
   .trapdoor-lid{box-shadow:inset 0 2px 3px rgba(255,255,255,.07),0 10px 22px rgba(0,0,0,.6)}
   .wm-floor{text-shadow:none}
+  .trapdoor-new{animation:none}
 }
 
 @media(max-width:760px){
@@ -264,7 +269,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
     <div class="drawer-section" id="tab-privacy">
       <h2>PRIVACY POLICY</h2>
       <p>THE FLOOR respects your privacy. Contact details are used solely to respond to commissions and are never shared.</p>
-      <p>Minimal local storage remembers cookie consent only.</p>
+      <p>Minimal local storage remembers your cookie choice and which posters you have already seen (so new ones can be marked). Nothing is sent anywhere.</p>
     </div>
     <div class="drawer-section" id="tab-terms">
   <h2>TERMS &amp; CONDITIONS</h2>
@@ -342,6 +347,15 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
    - Uses id: "about"
    - Fixed order: Intro, Bio, Contact (keepOrder: true)
 
+   NEW BADGES:
+   - AUTOMATIC: you don't have to do anything. Add posters / folders like normal. A visitor who has been
+     here before sees NEW on every folder or poster they haven't opened yet. Opening a folder marks
+     everything inside it as seen. First-time visitors see no badges (nothing is new to them), then see
+     badges for whatever you add after that. It is remembered per browser.
+   - OPTIONAL (a badge that EVERYONE sees for NEW_DAYS days): add  added: "2026-11-02"  to a folder, or write
+     a poster as  { name: "blastoise", added: "2026-11-02" }  (plain names still work next to them).
+   - New things also move to the front (NEW_FIRST near the top of the data).
+
    SEAM COLORS:
    - If you set seam, that color is used.
    - If you omit seam, color is taken from SEAM_PALETTE by folder index.
@@ -359,6 +373,11 @@ const SEAM_PALETTE = [
   "#FCA5A5", // soft red
   "#93C5FD"  // sky
 ];
+
+// OPTIONAL dated badges only (see "NEW BADGES" in the how-to above): a dated folder/poster counts as new for this many days.
+const NEW_DAYS = 14;
+// true = folders (and posters inside a folder) that are new are shown FIRST. false = keep normal order.
+const NEW_FIRST = true;
 
 // RAW DATA — write poster names here (any order). Sorted automatically (unless keepOrder: true).
 const RAW_FOLDERS = [
@@ -388,14 +407,14 @@ const RAW_FOLDERS = [
     name: "FEMME",
     seam: "#F2B5C4",
     path: "posters/femme/",
-    posters: ["bubblegum","calling","cd","daisies","fashion","her","kali","pink vines","raaatatata","GLOW","Star girl","Angel","DOTTED MATRIX","CAT'S friend"]
+    posters: ["bubblegum","calling","cd","daisies","fashion","her","kali","pink vines","raaatatata","GLOW","Star girl","Angel","DOTTED MATRIX"]
   },
   {
     id: "masc",
     name: "MASC",
     seam: "#B9CDEB",
     path: "posters/masc/",
-    posters: ["26","afrofuturist crown","bound","cold shoulder","drip","eyes dont lie","fallen star","idc","leap","reflections","Watermelon","guitar","BLUEROSE ASSASSIN"]
+    posters: ["26","afrofuturist crown","bound","cold shoulder","drip","eyes dont lie","fallen star","idc","leap","reflections","Watermelon","guitar","BLUEROSE ASSASSIN"]
   },
   {
     id: "about",
@@ -408,20 +427,79 @@ const RAW_FOLDERS = [
 ];
 
 // Build final FOLDERS: auto seam + alphabetical posters (unless keepOrder)
+/* AUTOMATIC "NEW": each browser remembers which folders/posters it has already opened.
+   Anything you add later that this visitor hasn't opened yet shows NEW. A first-time visitor sees no
+   badges (nothing is new to them) but will see badges for whatever you add after that. */
+const SEEN_KEY = "tf_seen_v1";
+const seenFolders = new Set(), seenPosters = new Set();
+let hasSeenHistory = false;
+try {
+  const raw = JSON.parse(localStorage.getItem(SEEN_KEY) || "null");
+  if (raw && Array.isArray(raw.f) && Array.isArray(raw.p)) {
+    hasSeenHistory = true;
+    raw.f.forEach((x) => seenFolders.add(x));
+    raw.p.forEach((x) => seenPosters.add(x));
+  }
+} catch (e) {}
+function saveSeen() {
+  try { localStorage.setItem(SEEN_KEY, JSON.stringify({ f: [...seenFolders], p: [...seenPosters] })); } catch (e) {}
+}
+function markFolderSeen(folder) {
+  seenFolders.add(folder.id);
+  folder.posters.forEach((n) => seenPosters.add(folder.id + "/" + n));
+  saveSeen();
+}
+
+// "2026-11-02" -> true if that date is within the last NEW_DAYS days (today included)
+function isRecent(dateStr) {
+  const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(String(dateStr || "").trim());
+  if (!m) return false;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const days = Math.round((today - new Date(+m[1], +m[2] - 1, +m[3])) / 86400000);
+  return days >= 0 && days < NEW_DAYS;
+}
+
 const FOLDERS = RAW_FOLDERS.map((folder, index) => {
-  const posters = folder.keepOrder
-    ? [...folder.posters]
-    : [...folder.posters].sort((a, b) =>
-        String(a).localeCompare(String(b), undefined, { sensitivity: "base", numeric: true })
-      );
+  const isAbout = folder.id === "about";
+  const folderDated = !isAbout && isRecent(folder.added);
+  const folderUnseen = !isAbout && hasSeenHistory && !seenFolders.has(folder.id);
+  // posters can be plain names or { name, added } — blank names are ignored
+  const items = folder.posters
+    .map((p) => (typeof p === "string" ? { name: p } : p))
+    .filter((p) => p && String(p.name || "").trim() !== "")
+    .map((p) => {
+      const name = String(p.name);
+      const dated = !isAbout && (p.added ? isRecent(p.added) : folderDated);
+      const unseen = !isAbout && hasSeenHistory && !seenPosters.has(folder.id + "/" + name);
+      return { name, dated, isNew: dated || unseen };
+    });
+  if (!folder.keepOrder) {
+    items.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base", numeric: true }));
+    if (NEW_FIRST) items.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0)); // stable: A–Z kept inside each group
+  }
+  const newSet = new Set(items.filter((i) => i.isNew).map((i) => i.name));
   return {
     id: folder.id,
     name: folder.name,
     path: folder.path.endsWith("/") ? folder.path : folder.path + "/",
     seam: folder.seam || SEAM_PALETTE[index % SEAM_PALETTE.length],
-    posters
+    posters: items.map((i) => i.name),
+    newSet,
+    folderNew: folderDated || folderUnseen,
+    dateNewAny: folderDated || items.some((i) => i.dated),
+    newCount: newSet.size
   };
 });
+// whole new folders first, then folders that only have new posters, then the rest (stable: your order is kept inside each group)
+const newRank = (f) => (f.folderNew ? 2 : (f.newCount ? 1 : 0));
+if (NEW_FIRST) FOLDERS.sort((a, b) => newRank(b) - newRank(a));
+// first visit ever: everything that exists today counts as "seen", so only FUTURE additions show as new
+if (!hasSeenHistory) {
+  FOLDERS.forEach((f) => { seenFolders.add(f.id); f.posters.forEach((n) => seenPosters.add(f.id + "/" + n)); });
+  saveSeen();
+}
+const newTag = (folder, name) => folder.newSet.has(name) ? `<span class="new-tag" style="color:${folder.seam}">NEW</span>` : "";
 
 const $ = (s) => document.querySelector(s);
 const pad = (n) => String(n).padStart(2, "0");
@@ -681,7 +759,7 @@ function completeLoader() {
 
 const state = {
   view: "loader", activeFolder: null, activeDoorCloneIndex: 6, scrollerFolders: [],
-  laneX: 0, laneTarget: 0, singleSetWidth: 0,
+  laneX: 0, laneTarget: 0, laneMin: 0, laneMax: 0, laneReady: false,
   laneDragging: false, laneStartX: 0, laneBaseTarget: 0, lanePointerMoved: false,
   dropY: 0, dropTarget: 0, dropSpacing: 860, dropItems: [], shaftRings: [],
   reelX: 0, reelTarget: 0, reelMin: 0,
@@ -695,33 +773,33 @@ let lastDepthText = "", lastFrameText = "";
 function buildFloorLane() {
   const t = elLaneTrack; t.innerHTML = "";
   state.scrollerFolders = FOLDERS.filter((f) => f.id !== "about");
-  [...state.scrollerFolders, ...state.scrollerFolders, ...state.scrollerFolders].forEach((f, ix) => {
-    const ri = ix % state.scrollerFolders.length;
+  state.scrollerFolders.forEach((f, ix) => {
+    const ri = ix;
+    const badge = f.folderNew ? `<span class="trapdoor-new">NEW</span>` : (f.newCount ? `<span class="trapdoor-new">+${f.newCount} NEW</span>` : "");
     const d = document.createElement("article");
     d.className = "trapdoor";
     d.dataset.folderId = f.id;
     d.dataset.cloneIdx = String(ix);
     d.style.setProperty("--seam", f.seam);
-    d.innerHTML = `<div class="trapdoor-seam"></div><div class="trapdoor-pit"><img class="trapdoor-pit-preview" alt="${f.name}"/></div><div class="trapdoor-lid"><div class="trapdoor-hinges"><span class="hinge"></span><span class="hinge"></span></div><div class="trapdoor-header"><span class="trapdoor-title">${f.name}</span><span class="trapdoor-Dot"></span></div><div class="trapdoor-footer"><span class="trapdoor-count">TD ${pad(ri + 1)}//${pad(f.posters.length)} Frames</span><div class="trapdoor-handle"></div></div></div>`;
+    d.innerHTML = `<div class="trapdoor-seam"></div><div class="trapdoor-pit"><img class="trapdoor-pit-preview" alt="${f.name}"/></div><div class="trapdoor-lid"><div class="trapdoor-hinges"><span class="hinge"></span><span class="hinge"></span></div><div class="trapdoor-header"><span class="trapdoor-title">${f.name}</span><span class="trapdoor-Dot"></span></div>${badge}<div class="trapdoor-footer"><span class="trapdoor-count">TD ${pad(ri + 1)}//${pad(f.posters.length)} Frames</span><div class="trapdoor-handle"></div></div></div>`;
     attachResolvedImage(d.querySelector(".trapdoor-pit-preview"), f, f.posters[0], 0);
     t.appendChild(d);
   });
-  requestAnimationFrame(measureInfiniteLane);
+  requestAnimationFrame(measureLane);
 }
-function measureInfiniteLane() {
-  const ds = elLaneTrack.querySelectorAll(".trapdoor");
-  const sz = state.scrollerFolders.length || 1;
-  if (ds.length < sz * 2) return;
-  state.singleSetWidth = ds[sz].getBoundingClientRect().left - ds[0].getBoundingClientRect().left;
-  if (state.laneX === 0 && state.singleSetWidth > 0) {
-    state.laneX = -state.singleSetWidth;
-    state.laneTarget = -state.singleSetWidth;
+function measureLane() {
+  const W = $("#lane-wrapper").clientWidth;
+  if (!W) return; // floor is hidden right now, nothing to measure
+  const total = elLaneTrack.offsetWidth;
+  if (total <= W) { state.laneMin = state.laneMax = (W - total) / 2; } // everything fits: centre it
+  else { state.laneMax = 0; state.laneMin = W - total; }              // otherwise: first door → last door, no wrapping
+  const hint = $("#lane-hint");
+  if (hint) hint.textContent = total <= W ? "pick a hatch" : "pick a hatch · scroll or drag the lane";
+  if (!state.laneReady) { state.laneReady = true; state.laneX = state.laneTarget = state.laneMax; }
+  else {
+    state.laneTarget = clamp(state.laneTarget, state.laneMin, state.laneMax);
+    state.laneX = clamp(state.laneX, state.laneMin, state.laneMax);
   }
-}
-function wrapInfiniteLane() {
-  const w = state.singleSetWidth; if (!w) return;
-  if (state.laneX > -w * 0.35) { state.laneX -= w; state.laneTarget -= w; }
-  else if (state.laneX < -w * 1.65) { state.laneX += w; state.laneTarget += w; }
 }
 function showFloorStage() {
   state.view = "floor";
@@ -729,7 +807,7 @@ function showFloorStage() {
   $("#open-drawer-btn").style.display = "inline-flex";
   updatePageMeta("THE FLOOR — Amey Nair | 1080×1350 Visual Archive", "THE FLOOR — curated archive.");
   const f = $("#floor"); f.style.display = "flex";
-  if (!elLaneTrack.children.length) buildFloorLane(); else measureInfiniteLane();
+  if (!elLaneTrack.children.length) buildFloorLane(); else measureLane();
 }
 function hideLaneHint() { const h = $("#lane-hint"); if (h) h.style.opacity = "0"; }
 
@@ -748,7 +826,7 @@ window.addEventListener("pointermove", (e) => {
   if (state.laneDragging && state.view === "floor") {
     const dx = e.clientX - state.laneStartX;
     if (Math.abs(dx) > 6) { state.lanePointerMoved = true; hideLaneHint(); }
-    state.laneTarget = state.laneBaseTarget + dx;
+    state.laneTarget = clamp(state.laneBaseTarget + dx, state.laneMin, state.laneMax);
     const dt = e.timeStamp - lanePrevT;
     if (dt > 0) { laneVel = laneVel * 0.8 + ((e.clientX - lanePrevX) / dt) * 0.2; lanePrevX = e.clientX; lanePrevT = e.timeStamp; }
   }
@@ -772,7 +850,7 @@ window.addEventListener("pointerup", (e) => {
     } else if (state.lanePointerMoved && e.pointerType === "touch" && state.view === "floor") {
       // touch only: gentle flick momentum (mouse behaviour is unchanged)
       const v = (e.timeStamp - lanePrevT > 80) ? 0 : laneVel;
-      state.laneTarget += clamp(v, -3, 3) * 160;
+      state.laneTarget = clamp(state.laneTarget + clamp(v, -3, 3) * 160, state.laneMin, state.laneMax);
     }
   }
   if (state.reelDragging) {
@@ -796,11 +874,12 @@ function openTrapdoorSequence(folder, doorEl) {
   if (state.view !== "floor") return;
   state.view = "opening"; state.activeFolder = folder;
   prioritizeFolder(folder);
+  markFolderSeen(folder);
   const isAbout = doorEl.id === "about-me-link";
   state.activeDoorCloneIndex = isAbout ? -1 : +(doorEl.dataset.cloneIdx || 0);
   if (!isAbout && doorEl.getBoundingClientRect) {
     const r = doorEl.getBoundingClientRect();
-    state.laneTarget += (innerWidth / 2) - (r.left + r.width / 2);
+    state.laneTarget = clamp(state.laneTarget + (innerWidth / 2) - (r.left + r.width / 2), state.laneMin, state.laneMax);
   }
   if (doorEl.classList && doorEl.classList.contains("trapdoor")) doorEl.classList.add("is-open");
   const floor = $("#floor");
@@ -837,7 +916,7 @@ function startDropSequence(folder) {
     const fr = document.createElement("div"); fr.className = "poster-frame";
     populatePosterFrame(fr, folder, rn, ix);
     const cp = document.createElement("div"); cp.className = "drop-caption";
-    cp.innerHTML = `<strong class="drop-caption-title">${String(rn).toUpperCase()}</strong><span class="drop-caption-meta">${pad(ix + 1)}/${pad(folder.posters.length)}·${folder.name}</span>`;
+    cp.innerHTML = `<strong class="drop-caption-title">${String(rn).toUpperCase()}</strong><span class="drop-caption-meta">${newTag(folder, rn)}${pad(ix + 1)}/${pad(folder.posters.length)}·${folder.name}</span>`;
     it.appendChild(fr); it.appendChild(cp);
     it.addEventListener("click", () => { if (it.classList.contains("is-centered")) openFocusModal(folder, rn, ix); });
     s.appendChild(it); state.dropItems.push({ el: it, caption: cp, idx: ix });
@@ -856,7 +935,7 @@ function enterGalleryReel(folder) {
     const fr = document.createElement("div"); fr.className = "poster-frame";
     populatePosterFrame(fr, folder, rn, ix, ix < 3);
     const cp = document.createElement("div"); cp.className = "reel-card-caption";
-    cp.innerHTML = `<span class="reel-card-name">${String(rn).toUpperCase()}</span><span class="reel-card-num">${pad(ix + 1)}/${pad(folder.posters.length)}</span>`;
+    cp.innerHTML = `<span class="reel-card-name">${String(rn).toUpperCase()}</span><span class="reel-card-num">${newTag(folder, rn)}${pad(ix + 1)}/${pad(folder.posters.length)}</span>`;
     c.appendChild(fr); c.appendChild(cp); tr.appendChild(c);
   });
   $("#gallery").style.display = "block";
@@ -880,14 +959,16 @@ $("#reel-next-btn").addEventListener("click", () => { state.reelTarget = clamp(s
 function returnToFloor() {
   if (state.view !== "shaft" && state.view !== "gallery") return;
   state.view = "returning"; closeFocusModal();
+  const af = state.activeFolder;
+  if (af && !af.dateNewAny) document.querySelectorAll(`.trapdoor[data-folder-id="${af.id}"] .trapdoor-new`).forEach((e) => e.remove());
   $("#shaft").style.display = "none"; $("#gallery").style.display = "none";
   $("#back-to-floor-btn").style.display = "none"; $("#open-drawer-btn").style.display = "inline-flex";
-  const floor = $("#floor"); floor.style.display = "flex"; measureInfiniteLane();
+  const floor = $("#floor"); floor.style.display = "flex"; measureLane();
   const isA = state.activeFolder?.id === "about";
   const td = isA ? null : (document.querySelector(`.trapdoor[data-clone-idx="${state.activeDoorCloneIndex}"]`) || document.querySelector(`.trapdoor[data-folder-id="${state.activeFolder?.id}"]`));
   if (td) {
     const r = td.getBoundingClientRect();
-    state.laneTarget += innerWidth / 2 - (r.left + r.width / 2);
+    state.laneTarget = clamp(state.laneTarget + innerWidth / 2 - (r.left + r.width / 2), state.laneMin, state.laneMax);
     state.laneX = state.laneTarget;
     elLaneTrack.style.transform = `translate3d(${state.laneX}px,-50%,0)`;
     lastLaneX = state.laneX;
@@ -931,7 +1012,6 @@ function masterTick(now) {
   if (state.view === "floor" || state.view === "opening") {
     state.laneX += (state.laneTarget - state.laneX) * k12;
     if (Math.abs(state.laneTarget - state.laneX) < 0.05) state.laneX = state.laneTarget;
-    wrapInfiniteLane();
     if (state.laneX !== lastLaneX) {
       elLaneTrack.style.transform = `translate3d(${state.laneX}px,-50%,0)`;
       lastLaneX = state.laneX;
@@ -1000,7 +1080,7 @@ function masterTick(now) {
 window.addEventListener("wheel", (e) => {
   if ($("#studio-drawer").style.display === "flex") return;
   const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-  if (state.view === "floor") { e.preventDefault(); state.laneTarget -= d * 1.15; hideLaneHint(); }
+  if (state.view === "floor") { e.preventDefault(); state.laneTarget = clamp(state.laneTarget - d * 1.15, state.laneMin, state.laneMax); hideLaneHint(); }
   else if (state.view === "shaft") { e.preventDefault(); $("#fall-hint").style.opacity = "0"; state.dropTarget = Math.max(0, state.dropTarget + d * 1.05); }
   else if (state.view === "gallery") { e.preventDefault(); state.reelTarget = clamp(state.reelTarget - d * 1.15, state.reelMin, 0); }
 }, { passive: false });
@@ -1012,7 +1092,7 @@ $("#shaft").addEventListener("touchmove", (e) => {
   const dy = tsy - e.touches[0].clientY; tsy = e.touches[0].clientY;
   $("#fall-hint").style.opacity = "0"; state.dropTarget = Math.max(0, state.dropTarget + dy * 1.8);
 }, { passive: true });
-window.addEventListener("resize", () => { measureInfiniteLane(); measureReelBounds(); });
+window.addEventListener("resize", () => { measureLane(); measureReelBounds(); });
 
 function openDrawer(t = "contact") { $("#studio-drawer").style.display = "flex"; swTab(t); }
 function closeDrawer() { $("#studio-drawer").style.display = "none"; }
@@ -1025,8 +1105,8 @@ $("#close-drawer-btn").addEventListener("click", closeDrawer);
 $("#drawer-return-btn").addEventListener("click", closeDrawer);
 document.querySelectorAll(".drawer-tab").forEach((b) => b.addEventListener("click", () => swTab(b.dataset.tab)));
 document.querySelectorAll("[data-open-tab]").forEach((b) => b.addEventListener("click", () => openDrawer(b.getAttribute("data-open-tab"))));
-if (!localStorage.getItem("tf_ck")) $("#cookie-banner").style.display = "flex";
-$("#accept-cookies-btn").addEventListener("click", () => { localStorage.setItem("tf_ck", "1"); $("#cookie-banner").style.display = "none"; });
+try { if (!localStorage.getItem("tf_ck")) $("#cookie-banner").style.display = "flex"; } catch (e) { $("#cookie-banner").style.display = "flex"; }
+$("#accept-cookies-btn").addEventListener("click", () => { try { localStorage.setItem("tf_ck", "1"); } catch (e) {} $("#cookie-banner").style.display = "none"; });
 window.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeFocusModal(); closeDrawer(); } });
 window.addEventListener("DOMContentLoaded", () => { initLoader(); requestAnimationFrame(masterTick); });
 </script>
