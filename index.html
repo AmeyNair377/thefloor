@@ -55,6 +55,8 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
 .floor-hero{width:100%;padding:clamp(86px,11vh,112px) 24px 0;display:flex;justify-content:center;pointer-events:none;z-index:2}
 .title-lockup{position:relative;width:fit-content;margin:0 auto;transform:rotate(-2.4deg);transform-origin:center center;text-align:center}
 .wm-the{position:absolute;top:-8px;left:14%;transform:translateX(-70%);font-family:var(--font-mono);font-size:clamp(12px,1.2vw,16px);font-weight:700;letter-spacing:.65em;color:rgba(237,234,228,.45);white-space:nowrap}
+.wm-floor-wrap{position:relative;width:fit-content;margin:0 auto}
+.wm-by{position:absolute;top:-8px;right:0;font-family:var(--font-mono);font-size:clamp(12px,1.2vw,16px);font-weight:700;letter-spacing:.65em;color:rgba(237,234,228,.45);white-space:nowrap}
 .wm-floor{font-family:var(--font-display);font-size:clamp(54px,8.4vw,128px);font-weight:800;line-height:.84;letter-spacing:-.045em;text-transform:uppercase;text-shadow:0 20px 50px rgba(0,0,0,.5)}
 .floor-tagline{margin-top:10px;font-family:var(--font-hand);font-size:clamp(24px,2.7vw,38px);color:#d9d3c8;opacity:.92}
 .floor-stage{flex:1;position:relative;display:flex;align-items:center;min-height:0;padding:12px 0}
@@ -158,6 +160,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
   .about-me-link:hover{transform:rotate(-5deg) scale(1.03)}
   .floor-hero{padding:110px 18px 0}
   .wm-the{top:-6px;left:22%;transform:translateX(-55%);font-size:11px;letter-spacing:.45em}
+  .wm-by{top:-6px;font-size:11px;letter-spacing:.45em}
   .wm-floor{font-size:clamp(46px,14vw,74px)}
   .floor-tagline{font-size:clamp(20px,5.5vw,28px)}
   .lane-wrapper{height:clamp(205px,32vh,275px)}
@@ -197,7 +200,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
   <header class="floor-hero">
     <div class="title-lockup">
       <span class="wm-the">THE</span>
-      <h1 class="wm-floor">FLOOR</h1>
+      <div class="wm-floor-wrap"><h1 class="wm-floor">FLOOR</h1><span class="wm-by">BY AMEY</span></div>
       <p class="floor-tagline">i made these inside my head. now they live on the floor.</p>
     </div>
   </header>
@@ -269,7 +272,7 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
     <div class="drawer-section" id="tab-privacy">
       <h2>PRIVACY POLICY</h2>
       <p>THE FLOOR respects your privacy. Contact details are used solely to respond to commissions and are never shared.</p>
-      <p>Minimal local storage remembers your cookie choice and which posters you have already seen (so new ones can be marked). Nothing is sent anywhere.</p>
+      <p>Minimal local storage remembers cookie consent only.</p>
     </div>
     <div class="drawer-section" id="tab-terms">
   <h2>TERMS &amp; CONDITIONS</h2>
@@ -305,60 +308,20 @@ a{color:inherit;text-decoration:none}ul{list-style:none}
    HOW TO MANAGE THE FLOOR
    ============================================================
 
-   IMAGE FOLDERS (on your laptop):
-   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\studies\
-   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\pokemon\
-   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\objects\
-   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\femme\
-   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\masc\
-   C:\Users\Amey\OneDrive\Desktop\Websites\thefloor\posters\about\
+   ADD A POSTER / ADD A WHOLE NEW FOLDER (trapdoor):
+   1. Put the image in  posters/<folder>/   (a new folder inside posters/ = a new trapdoor)
+   2. Double-click  update-posters.bat      (or run:  node update-posters.js)
+   3. Commit + push. Done. You never type poster or folder names.
 
-   ADD A POSTER:
-   1. Put file in the correct posters/<folder>/ directory
-      e.g. posters/pokemon/blastoise.png
-   2. Add the name WITHOUT extension into that folder's posters array below
-      posters: [..., "blastoise"]
-   3. Save + refresh
-   → Site auto-sorts A–Z (natural order). Order in the array does not matter.
-   → Use .webp files (quality ~80-85). The site tries .webp first, then .png/.jpg.
-   → Images are preloaded in the background automatically. Nothing else to do.
-   → EXCEPTION: a folder with keepOrder: true is NOT sorted. It shows
-     posters in exactly the order you write them in the array.
-     (ABOUT ME uses this: intro → bio → contact.)
+   WHAT HAPPENS AUTOMATICALLY
+   - Trapdoors are sorted A–Z. Posters inside each trapdoor are sorted A–Z.
+   - New folders and new posters get a NEW badge for 7 days (NEW_DAYS), then it disappears by itself.
+   - Images can be .webp .png .jpg .jpeg. If a name exists as .webp and .png, the .webp is used.
+   - Hide something without deleting it: rename the file/folder so it starts with _  (e.g. _dice.webp)
+   - ABOUT ME (folder "about") is special: its posters keep the order intro, bio, contact.
+   - Folder label / trapdoor colour: edit "name" or "seam" in the list below once. Your edit is kept.
 
-   ADD A NEW FOLDER:
-   1. Create posters/newfolder/
-   2. Add images there
-   3. Copy a folder object below and edit:
-      {
-        id: "newfolder",          // lowercase, matches folder path
-        name: "NEW FOLDER",       // display label on trapdoor
-        // seam: "#FF8B5C",       // OPTIONAL color. If omitted, auto-picked
-        // keepOrder: true,       // OPTIONAL. Keep the array order (no A–Z sort)
-        path: "posters/newfolder/",
-        posters: ["one", "two"]
-      }
-   4. Keep ABOUT ME as id:"about" if you want the top-left text link.
-      Any other folder joins the infinite scroller automatically.
-
-   ABOUT ME:
-   - Special. Not in the scroller.
-   - Top-left tilted text button.
-   - Uses id: "about"
-   - Fixed order: Intro, Bio, Contact (keepOrder: true)
-
-   NEW BADGES:
-   - AUTOMATIC: you don't have to do anything. Add posters / folders like normal. A visitor who has been
-     here before sees NEW on every folder or poster they haven't opened yet. Opening a folder marks
-     everything inside it as seen. First-time visitors see no badges (nothing is new to them), then see
-     badges for whatever you add after that. It is remembered per browser.
-   - OPTIONAL (a badge that EVERYONE sees for NEW_DAYS days): add  added: "2026-11-02"  to a folder, or write
-     a poster as  { name: "blastoise", added: "2026-11-02" }  (plain names still work next to them).
-   - New things also move to the front (NEW_FIRST near the top of the data).
-
-   SEAM COLORS:
-   - If you set seam, that color is used.
-   - If you omit seam, color is taken from SEAM_PALETTE by folder index.
+   OPTIONS (just below):  NEW_DAYS = how long the badge lasts,  NEW_FIRST = put new things first.
    ============================================================ */
 
 const SEAM_PALETTE = [
@@ -374,81 +337,115 @@ const SEAM_PALETTE = [
   "#93C5FD"  // sky
 ];
 
-// OPTIONAL dated badges only (see "NEW BADGES" in the how-to above): a dated folder/poster counts as new for this many days.
-const NEW_DAYS = 14;
-// true = folders (and posters inside a folder) that are new are shown FIRST. false = keep normal order.
+// A folder / poster shows a NEW badge for this many days after update-posters.js first saw it.
+const NEW_DAYS = 7;
+// false = plain A–Z order. true = new folders/posters are moved to the front.
 const NEW_FIRST = false;
 
-// RAW DATA — write poster names here (any order). Sorted automatically (unless keepOrder: true).
-const RAW_FOLDERS = [
-  {
-    id: "studies",
-    name: "STUDIES",
-    seam: "#F2E5A3",
-    path: "posters/studies/",
-    posters: ["Study01","Study02","Study03","Study04","Study05","Study06","Study07","Study08","Study09","Study10","Study11","Study12","Study13","Study14","Study15"]
-  },
-  {
-    id: "pokemon",
-    name: "POKEMON",
-    seam: "#F2F06B",
-    path: "posters/pokemon/",
-    posters: ["alakazam","arcanine","articuno","celebi","charizard","dragonite","gardevoir","gengar","gyarados","houndoom","lapras","machamp","metagross","mew","salamance","snorlax","typhlosion","umbreon"]
-  },
-  {
-    id: "objects",
-    name: "OBJECTS",
-    seam: "#5EEAD4",
-    path: "posters/objects/",
-    posters: ["chandelier","concrete stairwell","dice","fencing mask","heart","hydraulic manifold block","microscope","night Shade","phalanx","satellite","turbojet", "the bus"]
-  },
-  {
-    id: "femme",
-    name: "FEMME",
-    seam: "#F2B5C4",
-    path: "posters/femme/",
-    posters: ["bubblegum","calling","cd","daisies","fashion","her","kali","pink vines","raaatatata","GLOW","Star girl","Angel","DOTTED MATRIX","CAT'S friend"]
-  },
-  {
-    id: "masc",
-    name: "MASC",
-    seam: "#B9CDEB",
-    path: "posters/masc/",
-    posters: ["26","afrofuturist crown","bound","cold shoulder","drip","eyes dont lie","fallen star","idc","leap","reflections","Watermelon","guitar","BLUEROSE ASSASSIN"]
-  },
-  {
-    id: "about",
-    name: "ABOUT ME",
-    seam: "#F5F5F5",
-    path: "posters/about/",
-    keepOrder: true, // fixed order: Intro → Bio → Contact (not sorted A–Z)
-    posters: ["intro","bio","contact"]
-  }
-];
+// ---------------------------------------------------------------------------------------------
+// FOLDER + POSTER LIST. Written automatically by  update-posters.js  (double-click update-posters.bat).
+// You never edit this block by hand.
+// ---------------------------------------------------------------------------------------------
+/*POSTERS-MANIFEST-START — written by update-posters.js, do not edit by hand*/
+const MANIFEST = {
+  "initialized": true,
+  "folders": [
+    {"id":"femme","dir":"femme","name":"FEMME","seam":"#F2B5C4","keepOrder":false,"added":"","posters":[
+      ["Angel","Angel.png",""],
+      ["bubblegum","bubblegum.png",""],
+      ["calling","calling.png",""],
+      ["CAT'S friend","CAT'S friend.png",""],
+      ["cd","cd.png",""],
+      ["daisies","daisies.png",""],
+      ["DOTTED MATRIX","DOTTED MATRIX.png",""],
+      ["fashion","fashion.png",""],
+      ["GLOW","GLOW.png",""],
+      ["her","her.png",""],
+      ["kali","kali.png",""],
+      ["pink vines","pink vines.png",""],
+      ["raaatatata","raaatatata.png",""],
+      ["Star girl","Star girl.png",""]
+    ]},
+    {"id":"masc","dir":"masc","name":"MASC","seam":"#B9CDEB","keepOrder":false,"added":"","posters":[
+      ["26","26.png",""],
+      ["afrofuturist crown","afrofuturist crown.png",""],
+      ["BLUEROSE ASSASSIN","BLUEROSE ASSASSIN.png",""],
+      ["bound","bound.png",""],
+      ["cold shoulder","cold shoulder.png",""],
+      ["drip","drip.png",""],
+      ["eyes dont lie","eyes dont lie.png",""],
+      ["fallen star","fallen star.png",""],
+      ["guitar","guitar.png",""],
+      ["idc","idc.png",""],
+      ["leap","leap.png",""],
+      ["reflections","reflections.png",""],
+      ["Watermelon","Watermelon.png",""]
+    ]},
+    {"id":"objects","dir":"objects","name":"OBJECTS","seam":"#5EEAD4","keepOrder":false,"added":"","posters":[
+      ["chandelier","chandelier.png",""],
+      ["concrete stairwell","concrete stairwell.png",""],
+      ["dice","dice.png",""],
+      ["fencing mask","fencing mask.png",""],
+      ["heart","heart.png",""],
+      ["hydraulic manifold block","hydraulic manifold block.png",""],
+      ["microscope","microscope.png",""],
+      ["night Shade","night Shade.png",""],
+      ["phalanx","phalanx.png",""],
+      ["satellite","satellite.png",""],
+      ["the bus","the bus.png",""],
+      ["turbojet","turbojet.png",""]
+    ]},
+    {"id":"pokemon","dir":"pokemon","name":"POKEMON","seam":"#F2F06B","keepOrder":false,"added":"","posters":[
+      ["alakazam","alakazam.png",""],
+      ["arcanine","arcanine.png",""],
+      ["articuno","articuno.png",""],
+      ["celebi","celebi.png",""],
+      ["charizard","charizard.png",""],
+      ["dragonite","dragonite.png",""],
+      ["gardevoir","gardevoir.png",""],
+      ["gengar","gengar.png",""],
+      ["gyarados","gyarados.png",""],
+      ["houndoom","houndoom.png",""],
+      ["lapras","lapras.png",""],
+      ["machamp","machamp.png",""],
+      ["metagross","metagross.png",""],
+      ["mew","mew.png",""],
+      ["salamance","salamance.png",""],
+      ["snorlax","snorlax.png",""],
+      ["typhlosion","typhlosion.png",""],
+      ["umbreon","umbreon.png",""]
+    ]},
+    {"id":"studies","dir":"studies","name":"STUDIES","seam":"#F2E5A3","keepOrder":false,"added":"","posters":[
+      ["Study01","Study01.png",""],
+      ["Study02","Study02.png",""],
+      ["Study03","Study03.png",""],
+      ["Study04","Study04.png",""],
+      ["Study05","Study05.png",""],
+      ["Study06","Study06.png",""],
+      ["Study07","Study07.png",""],
+      ["Study08","Study08.png",""],
+      ["Study09","Study09.png",""],
+      ["Study10","Study10.png",""],
+      ["Study11","Study11.png",""],
+      ["Study12","Study12.png",""],
+      ["Study13","Study13.png",""],
+      ["Study14","Study14.png",""],
+      ["Study15","Study15.png",""]
+    ]}
+  ]
+};
+/*POSTERS-MANIFEST-END*/
 
-// Build final FOLDERS: auto seam + alphabetical posters (unless keepOrder)
-/* AUTOMATIC "NEW": each browser remembers which folders/posters it has already opened.
-   Anything you add later that this visitor hasn't opened yet shows NEW. A first-time visitor sees no
-   badges (nothing is new to them) but will see badges for whatever you add after that. */
-const SEEN_KEY = "tf_seen_v1";
-const seenFolders = new Set(), seenPosters = new Set();
-let hasSeenHistory = false;
-try {
-  const raw = JSON.parse(localStorage.getItem(SEEN_KEY) || "null");
-  if (raw && Array.isArray(raw.f) && Array.isArray(raw.p)) {
-    hasSeenHistory = true;
-    raw.f.forEach((x) => seenFolders.add(x));
-    raw.p.forEach((x) => seenPosters.add(x));
-  }
-} catch (e) {}
-function saveSeen() {
-  try { localStorage.setItem(SEEN_KEY, JSON.stringify({ f: [...seenFolders], p: [...seenPosters] })); } catch (e) {}
-}
-function markFolderSeen(folder) {
-  seenFolders.add(folder.id);
-  folder.posters.forEach((n) => seenPosters.add(folder.id + "/" + n));
-  saveSeen();
-}
+// manifest -> the shape the rest of the page uses
+const RAW_FOLDERS = MANIFEST.folders.map((f) => ({
+  id: f.id,
+  name: f.name,
+  seam: f.seam,
+  keepOrder: f.keepOrder,
+  added: f.added,
+  path: "posters/" + f.dir + "/",
+  posters: f.posters.map((p) => ({ name: p[0], file: p[1], added: p[2] }))
+}));
 
 // "2026-11-02" -> true if that date is within the last NEW_DAYS days (today included)
 function isRecent(dateStr) {
@@ -460,45 +457,39 @@ function isRecent(dateStr) {
   return days >= 0 && days < NEW_DAYS;
 }
 
+const byName = (a, b) => String(a).localeCompare(String(b), undefined, { sensitivity: "base", numeric: true });
 const FOLDERS = RAW_FOLDERS.map((folder, index) => {
   const isAbout = folder.id === "about";
-  const folderDated = !isAbout && isRecent(folder.added);
-  const folderUnseen = !isAbout && hasSeenHistory && !seenFolders.has(folder.id);
-  // posters can be plain names or { name, added } — blank names are ignored
+  const folderNew = !isAbout && isRecent(folder.added);
   const items = folder.posters
-    .map((p) => (typeof p === "string" ? { name: p } : p))
     .filter((p) => p && String(p.name || "").trim() !== "")
     .map((p) => {
       const name = String(p.name);
-      const dated = !isAbout && (p.added ? isRecent(p.added) : folderDated);
-      const unseen = !isAbout && hasSeenHistory && !seenPosters.has(folder.id + "/" + name);
-      return { name, dated, isNew: dated || unseen };
+      return { name, file: p.file, isNew: !isAbout && (p.added ? isRecent(p.added) : folderNew) };
     });
   if (!folder.keepOrder) {
-    items.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base", numeric: true }));
+    items.sort((a, b) => byName(a.name, b.name));
     if (NEW_FIRST) items.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0)); // stable: A–Z kept inside each group
   }
   const newSet = new Set(items.filter((i) => i.isNew).map((i) => i.name));
+  const files = {};
+  items.forEach((i) => { if (i.file) files[i.name] = i.file; });
   return {
     id: folder.id,
     name: folder.name,
     path: folder.path.endsWith("/") ? folder.path : folder.path + "/",
     seam: folder.seam || SEAM_PALETTE[index % SEAM_PALETTE.length],
     posters: items.map((i) => i.name),
+    files,
     newSet,
-    folderNew: folderDated || folderUnseen,
-    dateNewAny: folderDated || items.some((i) => i.dated),
+    folderNew,
     newCount: newSet.size
   };
 });
-// whole new folders first, then folders that only have new posters, then the rest (stable: your order is kept inside each group)
+// trapdoors A–Z too (ABOUT ME is not in the lane)
+FOLDERS.sort((a, b) => byName(a.name, b.name));
 const newRank = (f) => (f.folderNew ? 2 : (f.newCount ? 1 : 0));
-if (NEW_FIRST) FOLDERS.sort((a, b) => newRank(b) - newRank(a));
-// first visit ever: everything that exists today counts as "seen", so only FUTURE additions show as new
-if (!hasSeenHistory) {
-  FOLDERS.forEach((f) => { seenFolders.add(f.id); f.posters.forEach((n) => seenPosters.add(f.id + "/" + n)); });
-  saveSeen();
-}
+if (NEW_FIRST) FOLDERS.sort((a, b) => newRank(b) - newRank(a)); // stable
 const newTag = (folder, name) => folder.newSet.has(name) ? `<span class="new-tag" style="color:${folder.seam}">NEW</span>` : "";
 
 const $ = (s) => document.querySelector(s);
@@ -536,6 +527,8 @@ function getCandidatePaths(folder, rawName, index) {
   const hint = extHint[folder.id];
   const exts = hint && baseExts.includes(hint) ? [hint, ...baseExts.filter((x) => x !== hint)] : baseExts;
   const list = [];
+  const known = folder.files && folder.files[rawName];
+  if (known) list.push(`${folder.path}${known}`); // exact file found by update-posters.js: no guessing, no 404s
   stems.forEach((s) => exts.forEach((x) => list.push(`${folder.path}${s}.${x}`)));
   return [...new Set(list)];
 }
@@ -874,7 +867,6 @@ function openTrapdoorSequence(folder, doorEl) {
   if (state.view !== "floor") return;
   state.view = "opening"; state.activeFolder = folder;
   prioritizeFolder(folder);
-  markFolderSeen(folder);
   const isAbout = doorEl.id === "about-me-link";
   state.activeDoorCloneIndex = isAbout ? -1 : +(doorEl.dataset.cloneIdx || 0);
   if (!isAbout && doorEl.getBoundingClientRect) {
@@ -959,8 +951,6 @@ $("#reel-next-btn").addEventListener("click", () => { state.reelTarget = clamp(s
 function returnToFloor() {
   if (state.view !== "shaft" && state.view !== "gallery") return;
   state.view = "returning"; closeFocusModal();
-  const af = state.activeFolder;
-  if (af && !af.dateNewAny) document.querySelectorAll(`.trapdoor[data-folder-id="${af.id}"] .trapdoor-new`).forEach((e) => e.remove());
   $("#shaft").style.display = "none"; $("#gallery").style.display = "none";
   $("#back-to-floor-btn").style.display = "none"; $("#open-drawer-btn").style.display = "inline-flex";
   const floor = $("#floor"); floor.style.display = "flex"; measureLane();
